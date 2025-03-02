@@ -1,9 +1,9 @@
-import FormModal from "@/components/FormModal";
-import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
-import TableSearch from "@/components/TableSearch";
-import { classesData, role } from "@/lib/data";
-import Image from "next/image";
+import FormModal from '@/components/FormModal';
+import Pagination from '@/components/Pagination';
+import Table from '@/components/Table';
+import TableSearch from '@/components/TableSearch';
+import { classesData, role } from '@/lib/data';
+import Image from 'next/image';
 
 type Class = {
   id: number;
@@ -15,27 +15,27 @@ type Class = {
 
 const columns = [
   {
-    header: "Class Name",
-    accessor: "name",
+    header: 'Class Name',
+    accessor: 'name',
   },
   {
-    header: "Capacity",
-    accessor: "capacity",
-    className: "hidden md:table-cell",
+    header: 'Capacity',
+    accessor: 'capacity',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Grade",
-    accessor: "grade",
-    className: "hidden md:table-cell",
+    header: 'Grade',
+    accessor: 'grade',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Supervisor",
-    accessor: "supervisor",
-    className: "hidden md:table-cell",
+    header: 'Supervisor',
+    accessor: 'supervisor',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Actions",
-    accessor: "action",
+    header: 'Actions',
+    accessor: 'action',
   },
 ];
 
@@ -51,7 +51,7 @@ const ClassListPage = () => {
       <td className="hidden md:table-cell">{item.supervisor}</td>
       <td>
         <div className="flex items-center gap-2">
-          {role === "admin" && (
+          {role === 'admin' && (
             <>
               <FormModal table="class" type="update" data={item} />
               <FormModal table="class" type="delete" id={item.id} />
@@ -76,7 +76,7 @@ const ClassListPage = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" && <FormModal table="class" type="create" />}
+            {role === 'admin' && <FormModal table="class" type="create" />}
           </div>
         </div>
       </div>

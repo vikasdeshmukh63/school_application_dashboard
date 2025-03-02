@@ -1,9 +1,9 @@
-import FormModal from "@/components/FormModal";
-import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
-import TableSearch from "@/components/TableSearch";
-import { eventsData, role } from "@/lib/data";
-import Image from "next/image";
+import FormModal from '@/components/FormModal';
+import Pagination from '@/components/Pagination';
+import Table from '@/components/Table';
+import TableSearch from '@/components/TableSearch';
+import { eventsData, role } from '@/lib/data';
+import Image from 'next/image';
 
 type Event = {
   id: number;
@@ -16,31 +16,31 @@ type Event = {
 
 const columns = [
   {
-    header: "Title",
-    accessor: "title",
+    header: 'Title',
+    accessor: 'title',
   },
   {
-    header: "Class",
-    accessor: "class",
+    header: 'Class',
+    accessor: 'class',
   },
   {
-    header: "Date",
-    accessor: "date",
-    className: "hidden md:table-cell",
+    header: 'Date',
+    accessor: 'date',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Start Time",
-    accessor: "startTime",
-    className: "hidden md:table-cell",
+    header: 'Start Time',
+    accessor: 'startTime',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "End Time",
-    accessor: "endTime",
-    className: "hidden md:table-cell",
+    header: 'End Time',
+    accessor: 'endTime',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Actions",
-    accessor: "action",
+    header: 'Actions',
+    accessor: 'action',
   },
 ];
 
@@ -57,7 +57,7 @@ const EventListPage = () => {
       <td className="hidden md:table-cell">{item.endTime}</td>
       <td>
         <div className="flex items-center gap-2">
-          {role === "admin" && (
+          {role === 'admin' && (
             <>
               <FormModal table="event" type="update" data={item} />
               <FormModal table="event" type="delete" id={item.id} />
@@ -82,7 +82,7 @@ const EventListPage = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" && <FormModal table="event" type="create" />}
+            {role === 'admin' && <FormModal table="event" type="create" />}
           </div>
         </div>
       </div>

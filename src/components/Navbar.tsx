@@ -1,5 +1,5 @@
-import Image from "next/image";
-import React from "react";
+import Image from 'next/image';
+import React from 'react';
 
 const Navbar = () => {
   return (
@@ -19,7 +19,9 @@ const Navbar = () => {
         <div className="bg-white rounded-full w-7 h-7 flex items-center justify-between cursor-pointer relative">
           <Image src="/announcement.png" width={20} height={20} alt="announcement.png" />
           {/* badge  */}
-          <div className="absolute -top-3 -right-3 w-5 h-5 flex justify-center items-center bg-purple-500 text-white rounded-full text-xs">1</div>
+          <div className="absolute -top-3 -right-3 w-5 h-5 flex justify-center items-center bg-purple-500 text-white rounded-full text-xs">
+            1
+          </div>
         </div>
         {/* user name and role  */}
         <div className="flex flex-col">

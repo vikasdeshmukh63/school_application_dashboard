@@ -1,10 +1,10 @@
-import FormModal from "@/components/FormModal";
-import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
-import TableSearch from "@/components/TableSearch";
-import { role, teachersData } from "@/lib/data";
-import Image from "next/image";
-import Link from "next/link";
+import FormModal from '@/components/FormModal';
+import Pagination from '@/components/Pagination';
+import Table from '@/components/Table';
+import TableSearch from '@/components/TableSearch';
+import { role, teachersData } from '@/lib/data';
+import Image from 'next/image';
+import Link from 'next/link';
 
 type Teacher = {
   id: number;
@@ -20,37 +20,37 @@ type Teacher = {
 
 const columns = [
   {
-    header: "Info",
-    accessor: "info",
+    header: 'Info',
+    accessor: 'info',
   },
   {
-    header: "Teacher ID",
-    accessor: "teacherId",
-    className: "hidden md:table-cell",
+    header: 'Teacher ID',
+    accessor: 'teacherId',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Subjects",
-    accessor: "subjects",
-    className: "hidden md:table-cell",
+    header: 'Subjects',
+    accessor: 'subjects',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Classes",
-    accessor: "classes",
-    className: "hidden md:table-cell",
+    header: 'Classes',
+    accessor: 'classes',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Phone",
-    accessor: "phone",
-    className: "hidden lg:table-cell",
+    header: 'Phone',
+    accessor: 'phone',
+    className: 'hidden lg:table-cell',
   },
   {
-    header: "Address",
-    accessor: "address",
-    className: "hidden lg:table-cell",
+    header: 'Address',
+    accessor: 'address',
+    className: 'hidden lg:table-cell',
   },
   {
-    header: "Actions",
-    accessor: "action",
+    header: 'Actions',
+    accessor: 'action',
   },
 ];
 
@@ -74,8 +74,8 @@ const TeacherListPage = () => {
         </div>
       </td>
       <td className="hidden md:table-cell">{item.teacherId}</td>
-      <td className="hidden md:table-cell">{item.subjects.join(",")}</td>
-      <td className="hidden md:table-cell">{item.classes.join(",")}</td>
+      <td className="hidden md:table-cell">{item.subjects.join(',')}</td>
+      <td className="hidden md:table-cell">{item.classes.join(',')}</td>
       <td className="hidden md:table-cell">{item.phone}</td>
       <td className="hidden md:table-cell">{item.address}</td>
       <td>
@@ -85,11 +85,11 @@ const TeacherListPage = () => {
               <Image src="/view.png" alt="" width={16} height={16} />
             </button>
           </Link>
-          {role === "admin" && (
+          {role === 'admin' && (
             // <button className="w-7 h-7 flex items-center justify-center rounded-full bg-customPurple">
             //   <Image src="/delete.png" alt="" width={16} height={16} />
             // </button>
-            <FormModal table="teacher" type="delete" id={item.id}/>
+            <FormModal table="teacher" type="delete" id={item.id} />
           )}
         </div>
       </td>
@@ -110,11 +110,11 @@ const TeacherListPage = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" && (
+            {role === 'admin' && (
               // <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               //   <Image src="/plus.png" alt="" width={14} height={14} />
               // </button>
-              <FormModal table="teacher" type="create"/>
+              <FormModal table="teacher" type="create" />
             )}
           </div>
         </div>

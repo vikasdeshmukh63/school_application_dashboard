@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const Announcements = () => {
   return (
@@ -16,7 +16,9 @@ const Announcements = () => {
             <h2 className="font-medium">Lorem ipsum dolor sit</h2>
             <span className="text-gray-400 text-xs bg-white rounded-md px-1 py-1">25-01-01</span>
           </div>
-          <p className="text-gray-400 text-sm">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+          <p className="text-gray-400 text-sm">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+          </p>
         </div>
         {/* announcement 2  */}
         <div className="bg-customPurpleLight rounded-md p-4 mt-1">
@@ -24,7 +26,9 @@ const Announcements = () => {
             <h2 className="font-medium">Lorem ipsum dolor sit</h2>
             <span className="text-gray-400 text-xs bg-white rounded-md px-1 py-1">25-01-01</span>
           </div>
-          <p className="text-gray-400 text-sm">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+          <p className="text-gray-400 text-sm">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+          </p>
         </div>
         {/* announcement 3  */}
         <div className="bg-customYellowLight rounded-md p-4 mt-1">
@@ -32,7 +36,9 @@ const Announcements = () => {
             <h2 className="font-medium">Lorem ipsum dolor sit</h2>
             <span className="text-gray-400 text-xs bg-white rounded-md px-1 py-1">25-01-01</span>
           </div>
-          <p className="text-gray-400 text-sm">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+          <p className="text-gray-400 text-sm">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+          </p>
         </div>
       </div>
     </div>

@@ -1,12 +1,9 @@
-import FormModal from "@/components/FormModal";
-import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
-import TableSearch from "@/components/TableSearch";
-import {
-  resultsData,
-  role,
-} from "@/lib/data";
-import Image from "next/image";
+import FormModal from '@/components/FormModal';
+import Pagination from '@/components/Pagination';
+import Table from '@/components/Table';
+import TableSearch from '@/components/TableSearch';
+import { resultsData, role } from '@/lib/data';
+import Image from 'next/image';
 
 type Result = {
   id: number;
@@ -14,43 +11,43 @@ type Result = {
   class: string;
   teacher: string;
   student: string;
-  type: "exam" | "assignment";
+  type: 'exam' | 'assignment';
   date: string;
   score: number;
 };
 
 const columns = [
   {
-    header: "Subject Name",
-    accessor: "name",
+    header: 'Subject Name',
+    accessor: 'name',
   },
   {
-    header: "Student",
-    accessor: "student",
+    header: 'Student',
+    accessor: 'student',
   },
   {
-    header: "Score",
-    accessor: "score",
-    className: "hidden md:table-cell",
+    header: 'Score',
+    accessor: 'score',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Teacher",
-    accessor: "teacher",
-    className: "hidden md:table-cell",
+    header: 'Teacher',
+    accessor: 'teacher',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Class",
-    accessor: "class",
-    className: "hidden md:table-cell",
+    header: 'Class',
+    accessor: 'class',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Date",
-    accessor: "date",
-    className: "hidden md:table-cell",
+    header: 'Date',
+    accessor: 'date',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Actions",
-    accessor: "action",
+    header: 'Actions',
+    accessor: 'action',
   },
 ];
 
@@ -68,12 +65,13 @@ const ResultListPage = () => {
       <td className="hidden md:table-cell">{item.date}</td>
       <td>
         <div className="flex items-center gap-2">
-          {role === "admin" || role === "teacher" && (
-            <>
-              <FormModal table="result" type="update" data={item} />
-              <FormModal table="result" type="delete" id={item.id} />
-            </>
-          )}
+          {role === 'admin' ||
+            (role === 'teacher' && (
+              <>
+                <FormModal table="result" type="update" data={item} />
+                <FormModal table="result" type="delete" id={item.id} />
+              </>
+            ))}
         </div>
       </td>
     </tr>
@@ -93,7 +91,7 @@ const ResultListPage = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" || role === "teacher" && <FormModal table="result" type="create" />}
+            {role === 'admin' || (role === 'teacher' && <FormModal table="result" type="create" />)}
           </div>
         </div>
       </div>

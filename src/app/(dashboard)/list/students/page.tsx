@@ -1,10 +1,10 @@
-import FormModal from "@/components/FormModal";
-import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
-import TableSearch from "@/components/TableSearch";
-import { role, studentsData } from "@/lib/data";
-import Image from "next/image";
-import Link from "next/link";
+import FormModal from '@/components/FormModal';
+import Pagination from '@/components/Pagination';
+import Table from '@/components/Table';
+import TableSearch from '@/components/TableSearch';
+import { role, studentsData } from '@/lib/data';
+import Image from 'next/image';
+import Link from 'next/link';
 
 type Student = {
   id: number;
@@ -20,32 +20,32 @@ type Student = {
 
 const columns = [
   {
-    header: "Info",
-    accessor: "info",
+    header: 'Info',
+    accessor: 'info',
   },
   {
-    header: "Student ID",
-    accessor: "studentId",
-    className: "hidden md:table-cell",
+    header: 'Student ID',
+    accessor: 'studentId',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Grade",
-    accessor: "grade",
-    className: "hidden md:table-cell",
+    header: 'Grade',
+    accessor: 'grade',
+    className: 'hidden md:table-cell',
   },
   {
-    header: "Phone",
-    accessor: "phone",
-    className: "hidden lg:table-cell",
+    header: 'Phone',
+    accessor: 'phone',
+    className: 'hidden lg:table-cell',
   },
   {
-    header: "Address",
-    accessor: "address",
-    className: "hidden lg:table-cell",
+    header: 'Address',
+    accessor: 'address',
+    className: 'hidden lg:table-cell',
   },
   {
-    header: "Actions",
-    accessor: "action",
+    header: 'Actions',
+    accessor: 'action',
   },
 ];
 
@@ -74,16 +74,16 @@ const StudentListPage = () => {
       <td className="hidden md:table-cell">{item.address}</td>
       <td>
         <div className="flex items-center gap-2">
-          <Link href={`/list/teachers/${item.id}`}>
+          <Link href={`/list/students/${item.id}`}>
             <button className="w-7 h-7 flex items-center justify-center rounded-full bg-customSky">
               <Image src="/view.png" alt="" width={16} height={16} />
             </button>
           </Link>
-          {role === "admin" && (
+          {role === 'admin' && (
             // <button className="w-7 h-7 flex items-center justify-center rounded-full bg-customPurple">
             //   <Image src="/delete.png" alt="" width={16} height={16} />
             // </button>
-            <FormModal table="student" type="delete" id={item.id}/>
+            <FormModal table="student" type="delete" id={item.id} />
           )}
         </div>
       </td>
@@ -104,11 +104,11 @@ const StudentListPage = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" && (
+            {role === 'admin' && (
               // <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               //   <Image src="/plus.png" alt="" width={14} height={14} />
               // </button>
-              <FormModal table="student" type="create"/>
+              <FormModal table="student" type="create" />
             )}
           </div>
         </div>
