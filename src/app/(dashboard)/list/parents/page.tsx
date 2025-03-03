@@ -130,7 +130,7 @@ const ParentListPage = async ({
 
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
-      {/* TOP */}
+      {/* top */}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold">All Parents</h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
@@ -142,13 +142,13 @@ const ParentListPage = async ({
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === 'admin' && <FormModal table="teacher" type="create" />}
+            {role === 'admin' && <FormModal table="parent" type="create" />}
           </div>
         </div>
       </div>
-      {/* LIST */}
+      {/* list */}
       <Table columns={columns} renderRow={renderRow} data={data} />
-      {/* PAGINATION */}
+      {/* pagination */}
       <Pagination count={count} page={page} />
     </div>
   );
