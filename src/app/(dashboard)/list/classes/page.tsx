@@ -61,7 +61,6 @@ const renderRow = (item: ClassList) => (
   </tr>
 );
 
-
 const ClassListPage = async ({
   searchParams,
 }: {
@@ -126,7 +125,7 @@ const ClassListPage = async ({
       where: query,
     }),
   ]);
-  
+
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP */}

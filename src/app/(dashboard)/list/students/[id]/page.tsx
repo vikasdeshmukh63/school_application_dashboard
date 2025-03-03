@@ -131,7 +131,10 @@ const StudentDetails = () => {
             <Link className="p-3 rounded-md bg-customSkyLight" href="/list/assignments?classId=2">
               Student&apos;s Assignments
             </Link>
-            <Link className="p-3 rounded-md bg-customYellowLight" href="/list/results?studentId=3">
+            <Link
+              className="p-3 rounded-md bg-customYellowLight"
+              href="/list/results?studentId=student1"
+            >
               Student&apos;s Results
             </Link>
           </div>
