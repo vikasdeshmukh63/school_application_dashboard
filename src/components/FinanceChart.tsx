@@ -20,71 +20,68 @@ const data = [
   },
   {
     name: 'Feb',
-    income: 4000,
-    expense: 3311,
+    income: 3000,
+    expense: 1398,
   },
   {
     name: 'Mar',
-    income: 2555,
-    expense: 6666,
+    income: 2000,
+    expense: 9800,
   },
   {
     name: 'Apr',
-    income: 1000,
-    expense: 6444,
+    income: 2780,
+    expense: 3908,
   },
   {
     name: 'May',
-    income: 7433,
-    expense: 3444,
+    income: 1890,
+    expense: 4800,
   },
   {
     name: 'Jun',
-    income: 1345,
-    expense: 5833,
+    income: 2390,
+    expense: 3800,
   },
   {
     name: 'Jul',
-    income: 3362,
-    expense: 6788,
+    income: 3490,
+    expense: 4300,
   },
   {
     name: 'Aug',
-    income: 9564,
-    expense: 4444,
+    income: 3490,
+    expense: 4300,
   },
   {
     name: 'Sep',
-    income: 4000,
-    expense: 2400,
+    income: 3490,
+    expense: 4300,
   },
   {
     name: 'Oct',
-    income: 4544,
-    expense: 6334,
+    income: 3490,
+    expense: 4300,
   },
   {
     name: 'Nov',
-    income: 3333,
-    expense: 2222,
+    income: 3490,
+    expense: 4300,
   },
   {
     name: 'Dec',
-    income: 5333,
-    expense: 5424,
+    income: 3490,
+    expense: 4300,
   },
 ];
 
 const FinanceChart = () => {
   return (
-    <div className="w-full h-full bg-white rounded-xl p-4">
-      {/* title  */}
+    <div className="bg-white rounded-xl w-full h-full p-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-lg font-semibold">Finance Chart</h1>
-        <Image src="/moreDark.png" alt="moreDark" width={20} height={20} />
+        <h1 className="text-lg font-semibold">Finance</h1>
+        <Image src="/moreDark.png" alt="" width={20} height={20} />
       </div>
-      {/* chart  */}
-
       <ResponsiveContainer width="100%" height="90%">
         <LineChart
           width={500}
@@ -101,23 +98,16 @@ const FinanceChart = () => {
           <XAxis
             dataKey="name"
             axisLine={false}
-            tickLine={false}
             tick={{ fill: '#d1d5db' }}
+            tickLine={false}
             tickMargin={10}
           />
-          <YAxis axisLine={false} tickLine={false} tick={{ fill: '#d1d5db' }} />
-          <Tooltip
-            contentStyle={{
-              borderRadius: 10,
-              borderColor: 'lightgray',
-              borderWidth: 1,
-              borderStyle: 'solid',
-            }}
-          />
+          <YAxis axisLine={false} tick={{ fill: '#d1d5db' }} tickLine={false} tickMargin={20} />
+          <Tooltip />
           <Legend
             align="center"
             verticalAlign="top"
-            wrapperStyle={{ paddingTop: 10, paddingBottom: 30 }}
+            wrapperStyle={{ paddingTop: '10px', paddingBottom: '30px' }}
           />
           <Line type="monotone" dataKey="income" stroke="#C3EBFA" strokeWidth={5} />
           <Line type="monotone" dataKey="expense" stroke="#CFCEFF" strokeWidth={5} />
