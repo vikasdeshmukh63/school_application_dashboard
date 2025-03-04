@@ -8,6 +8,7 @@ import prisma from '@/lib/prisma';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { Lesson, Prisma, Subject, Class, Teacher } from '@prisma/client';
+import { getUserRole } from '@/utils/utils';
 
 type LessonList = Lesson & {
   subject: Subject;
@@ -15,52 +16,60 @@ type LessonList = Lesson & {
   teacher: Teacher;
 };
 
-const columns = [
-  {
-    header: 'Subject Name',
-    accessor: 'name',
-  },
-  {
-    header: 'Class',
-    accessor: 'class',
-  },
-  {
-    header: 'Teacher',
-    accessor: 'teacher',
-    className: 'hidden md:table-cell',
-  },
-  {
-    header: 'Actions',
-    accessor: 'action',
-  },
-];
-
-const renderRow = (item: LessonList) => (
-  <tr
-    key={item.id}
-    className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-customPurpleLight"
-  >
-    <td className="flex items-center gap-4 p-4">{item.subject.name}</td>
-    <td>{item.class.name}</td>
-    <td className="hidden md:table-cell">{item.teacher.name + ' ' + item.teacher.surname}</td>
-    <td>
-      <div className="flex items-center gap-2">
-        {role === 'admin' && (
-          <>
-            <FormModal table="lesson" type="update" data={item} />
-            <FormModal table="lesson" type="delete" id={item.id} />
-          </>
-        )}
-      </div>
-    </td>
-  </tr>
-);
+const renderRow = async (item: LessonList) => {
+  const role = await getUserRole();
+  return (
+    <tr
+      key={item.id}
+      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-customPurpleLight"
+    >
+      <td className="flex items-center gap-4 p-4">{item.subject.name}</td>
+      <td>{item.class.name}</td>
+      <td className="hidden md:table-cell">{item.teacher.name + ' ' + item.teacher.surname}</td>
+      <td>
+        <div className="flex items-center gap-2">
+          {role === 'admin' && (
+            <>
+              <FormModal table="lesson" type="update" data={item} />
+              <FormModal table="lesson" type="delete" id={item.id} />
+            </>
+          )}
+        </div>
+      </td>
+    </tr>
+  );
+};
 
 const LessonListPage = async ({
   searchParams,
 }: {
   searchParams: { [key: string]: string } | undefined;
 }) => {
+  const role = await getUserRole();
+
+  const columns = [
+    {
+      header: 'Subject Name',
+      accessor: 'name',
+    },
+    {
+      header: 'Class',
+      accessor: 'class',
+    },
+    {
+      header: 'Teacher',
+      accessor: 'teacher',
+      className: 'hidden md:table-cell',
+    },
+    ...(role === 'admin'
+      ? [
+          {
+            header: 'Actions',
+            accessor: 'action',
+          },
+        ]
+      : []),
+  ];
   // getting page from url
   const pageParams = searchParams?.page;
 
@@ -129,7 +138,7 @@ const LessonListPage = async ({
 
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
-      {/* TOP */}
+      {/* top */}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold">All Lessons</h1>
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
@@ -145,9 +154,9 @@ const LessonListPage = async ({
           </div>
         </div>
       </div>
-      {/* LIST */}
+      {/* list */}
       <Table columns={columns} renderRow={renderRow} data={data} />
-      {/* PAGINATION */}
+      {/* pagination */}
       <Pagination count={count} page={page} />
     </div>
   );
