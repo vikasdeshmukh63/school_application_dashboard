@@ -4,7 +4,7 @@ import Table from '@/components/Table';
 import TableSearch from '@/components/TableSearch';
 import prisma from '@/lib/prisma';
 import { ITEM_PER_PAGE } from '@/lib/settings';
-import { getUserRole } from '@/utils/utils';
+import { getUserId, getUserRole } from '@/utils/utils';
 import { Assignment, Class, Lesson, Prisma, Subject, Teacher } from '@prisma/client';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
@@ -53,6 +53,7 @@ const AssignmentListPage = async ({
   searchParams: { [key: string]: string } | undefined;
 }) => {
   const role = await getUserRole();
+  const userId = await getUserId();
 
   const columns = [
     {
@@ -127,6 +128,35 @@ const AssignmentListPage = async ({
     const newSearchParams = new URLSearchParams(searchParams || {});
     newSearchParams.set('page', '1');
     redirect(`/list/assignments?${newSearchParams.toString()}`);
+  }
+
+  // role conditions
+  switch (role) {
+    case 'admin':
+      break;
+    case 'teacher':
+      query.lesson.teacherId = userId!;
+      break;
+    case 'student':
+      query.lesson.class = {
+        students: {
+          some: {
+            id: userId!,
+          },
+        },
+      };
+      break;
+    case 'parent':
+      query.lesson.class = {
+        students: {
+          some: {
+            parentId: userId!,
+          },
+        },
+      };
+      break;
+    default:
+      break;
   }
 
   const [data, count] = await prisma.$transaction([
