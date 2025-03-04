@@ -5,7 +5,7 @@ import TableSearch from '@/components/TableSearch';
 import { classesData, role } from '@/lib/data';
 import prisma from '@/lib/prisma';
 import { ITEM_PER_PAGE } from '@/lib/settings';
-import { getUserRole } from '@/utils/utils';
+import { getUserId, getUserRole } from '@/utils/utils';
 import { Class, Grade, Prisma, Teacher } from '@prisma/client';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
@@ -47,6 +47,7 @@ const ClassListPage = async ({
   searchParams: { [key: string]: string } | undefined;
 }) => {
   const role = await getUserRole();
+  const userId = await getUserId();
 
   const columns = [
     {

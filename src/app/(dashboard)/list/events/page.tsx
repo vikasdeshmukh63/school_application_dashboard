@@ -4,7 +4,7 @@ import Table from '@/components/Table';
 import TableSearch from '@/components/TableSearch';
 import prisma from '@/lib/prisma';
 import { ITEM_PER_PAGE } from '@/lib/settings';
-import { getUserRole } from '@/utils/utils';
+import { getUserId, getUserRole } from '@/utils/utils';
 import { Class, Event, Prisma } from '@prisma/client';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
@@ -21,7 +21,7 @@ const renderRow = async (item: EventList) => {
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-customPurpleLight"
     >
       <td className="flex items-center gap-4 p-4">{item.title}</td>
-      <td>{item.class.name}</td>
+      <td>{item.class?.name || '-'}</td>
       <td className="hidden md:table-cell">
         {new Intl.DateTimeFormat('en-IN').format(item.startTime)}
       </td>
@@ -59,6 +59,7 @@ const EventListPage = async ({
   searchParams: { [key: string]: string } | undefined;
 }) => {
   const role = await getUserRole();
+  const userId = await getUserId();
 
   const columns = [
     {
@@ -128,8 +129,22 @@ const EventListPage = async ({
   if (page <= 0 || isNaN(page)) {
     const newSearchParams = new URLSearchParams(searchParams || {});
     newSearchParams.set('page', '1');
-    redirect(`/list/assignments?${newSearchParams.toString()}`);
+    redirect(`/list/events?${newSearchParams.toString()}`);
   }
+
+  // role conditions
+  const roleConditions = {
+    teacher: { lessons: { some: { teacherId: userId! } } },
+    student: { students: { some: { id: userId! } } },
+    parent: { students: { some: { parentId: userId! } } },
+  };
+
+  query.OR = [
+    { classId: null },
+    {
+      class: roleConditions[role as keyof typeof roleConditions] || {},
+    },
+  ];
 
   const [data, count] = await prisma.$transaction([
     // get events
