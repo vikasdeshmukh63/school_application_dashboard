@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: vikas
+      POSTGRES_PASSWORD: vikas123
+      POSTGRES_DB: school
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    container_name: school_app
+    ports:
+      - 3000:3000
+    environment:
+      DATABASE_URL: postgresql://vikas:vikas123@localhost:5432/school
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_bWlnaHR5LXN1bmJpcmQtMzIuY2xlcmsuYWNjb3VudHMuZGV2JA
+      CLERK_SECRET_KEY: sk_test_k29CYomN3mB9e4POTcEXH7khlTP0WzD8OKwtKP52Yo
+      NEXT_PUBLIC_CLERK_SIGN_IN_URL: /
+      NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: dlgi9ytwh
+      NEXT_PUBLIC_CLOUDINARY_API_KEY: 893684614275511
+    depends_on:
+      - postgres
+      
