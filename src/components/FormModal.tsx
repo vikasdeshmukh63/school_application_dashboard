@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteClass, deleteSubject } from '@/lib/actions';
+import { deleteClass, deleteSubject, deleteTeacher } from '@/lib/actions';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -15,12 +15,12 @@ type ServerAction = (
 ) => Promise<{ success: boolean; error: boolean }>;
 
 // delete action map
-const deleteActionMap: Record<TableType, ServerAction> = {
+const deleteActionMap: Partial<Record<TableType, ServerAction>> = {
   subject: deleteSubject,
-  // teacher: deleteSubject, // temporary placeholder
+  teacher: deleteTeacher,
+  class: deleteClass,
   // student: deleteSubject, // temporary placeholder
   // parent: deleteSubject, // temporary placeholder
-  class: deleteClass, // temporary placeholder
   // lesson: deleteSubject, // temporary placeholder
   // exam: deleteSubject, // temporary placeholder
   // assignment: deleteSubject, // temporary placeholder
@@ -56,7 +56,7 @@ const forms: {
     <SubjectForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
   ),
   teacher: (type, setOpen, data, relatedData) => (
-    <TeacherForm type={type} data={data} setOpen={setOpen} />
+    <TeacherForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
   ),
   student: (type, setOpen, data, relatedData) => (
     <StudentForm type={type} data={data} setOpen={setOpen} />
@@ -80,11 +80,14 @@ const FormModal = ({
   const [open, setOpen] = useState(false);
 
   const Form = () => {
-    const [state, formAction] = useFormState(deleteActionMap[table], {
-      success: false,
-      error: false,
-    });
-
+    const deleteAction = deleteActionMap[table];
+    const [state, formAction] = useFormState(
+      deleteAction || (() => Promise.resolve({ success: false, error: false })),
+      {
+        success: false,
+        error: false,
+      }
+    );
     const router = useRouter();
 
     useEffect(() => {
