@@ -1,34 +1,33 @@
 'use client';
 
-import {
-  deleteClass,
-  deleteExam,
-  deleteStudent,
-  deleteSubject,
-  deleteTeacher,
-} from '@/lib/actions';
+import { deleteSubject } from '@/lib/actions';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
 import { toast } from 'react-toastify';
-import { FormContainerProps } from './FormContainer';
+import { FormContainerProps, TableType } from './FormContainer';
 
-const deleteActionMap = {
+type ServerAction = (
+  currentState: { success: boolean; error: boolean },
+  data: FormData
+) => Promise<{ success: boolean; error: boolean }>;
+
+// delete action map
+const deleteActionMap: Record<TableType, ServerAction> = {
   subject: deleteSubject,
-  class: deleteClass,
-  teacher: deleteTeacher,
-  student: deleteStudent,
-  exam: deleteExam,
-  // TODO: OTHER DELETE ACTIONS
-  parent: deleteSubject,
-  lesson: deleteSubject,
-  assignment: deleteSubject,
-  result: deleteSubject,
-  attendance: deleteSubject,
-  event: deleteSubject,
-  announcement: deleteSubject,
+  // teacher: deleteSubject, // temporary placeholder
+  // student: deleteSubject, // temporary placeholder
+  // parent: deleteSubject, // temporary placeholder
+  // class: deleteSubject, // temporary placeholder
+  // lesson: deleteSubject, // temporary placeholder
+  // exam: deleteSubject, // temporary placeholder
+  // assignment: deleteSubject, // temporary placeholder
+  // result: deleteSubject, // temporary placeholder
+  // attendance: deleteSubject, // temporary placeholder
+  // event: deleteSubject, // temporary placeholder
+  // announcement: deleteSubject, // temporary placeholder
 };
 
 // using lazy loading
@@ -41,37 +40,23 @@ const StudentForm = dynamic(() => import('./forms/StudentForm'), {
 const SubjectForm = dynamic(() => import('./forms/SubjectForm'), {
   loading: () => <h1>Loading...</h1>,
 });
-const ClassForm = dynamic(() => import('./forms/ClassForm'), {
-  loading: () => <h1>Loading...</h1>,
-});
-const ExamForm = dynamic(() => import('./forms/ExamForm'), {
-  loading: () => <h1>Loading...</h1>,
-});
-// TODO: OTHER FORMS
 
 const forms: {
   [key: string]: (
-    setOpen: Dispatch<SetStateAction<boolean>>,
     type: 'create' | 'update',
+    setOpen: Dispatch<SetStateAction<boolean>>,
     data?: any,
     relatedData?: any
   ) => JSX.Element;
 } = {
-  subject: (setOpen, type, data, relatedData) => (
+  subject: (type, setOpen, data, relatedData) => (
     <SubjectForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
   ),
-  class: (setOpen, type, data, relatedData) => (
-    <ClassForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
+  teacher: (type, setOpen, data, relatedData) => (
+    <TeacherForm type={type} data={data} setOpen={setOpen} />
   ),
-  teacher: (setOpen, type, data, relatedData) => (
-    <TeacherForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
-  ),
-  student: (setOpen, type, data, relatedData) => (
-    <StudentForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
-  ),
-  exam: (setOpen, type, data, relatedData) => (
-    <ExamForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
-    // TODO OTHER LIST ITEMS
+  student: (type, setOpen, data, relatedData) => (
+    <StudentForm type={type} data={data} setOpen={setOpen} />
   ),
 };
 
@@ -81,7 +66,7 @@ const FormModal = ({
   data,
   id,
   relatedData,
-}: FormContainerProps & { relatedData?: any }) => {
+}: FormContainerProps & { relatedData: any }) => {
   const size = type === 'create' ? 'w-8 h-8' : 'w-7 h-7';
   const bgColor =
     type === 'create' ? 'bg-customYellow' : type === 'update' ? 'bg-customSky' : 'bg-customPurple';
@@ -89,23 +74,20 @@ const FormModal = ({
   const [open, setOpen] = useState(false);
 
   const Form = () => {
-    const [state, formAction] = useFormState(
-      deleteActionMap[table as keyof typeof deleteActionMap],
-      {
-        success: false,
-        error: false,
-      }
-    );
+    const [state, formAction] = useFormState(deleteActionMap[table], {
+      success: false,
+      error: false,
+    });
 
     const router = useRouter();
 
     useEffect(() => {
       if (state.success) {
-        toast(`${table} has been deleted!`);
-        setOpen(false);
+        toast.success(`${table} has been deleted successfully`);
         router.refresh();
+        setOpen(false);
       }
-    }, [state, router]);
+    }, [state]);
 
     return type === 'delete' && id ? (
       <form action={formAction} className="p-4 flex flex-col gap-4">
@@ -118,7 +100,7 @@ const FormModal = ({
         </button>
       </form>
     ) : type === 'create' || type === 'update' ? (
-      forms[table](setOpen, type, data, relatedData)
+      forms[table](type, setOpen, data, relatedData)
     ) : (
       'Form not found!'
     );
@@ -130,14 +112,14 @@ const FormModal = ({
         className={`${size} flex items-center justify-center rounded-full ${bgColor}`}
         onClick={() => setOpen(true)}
       >
-        <Image src={`/${type}.png`} alt={type} width={16} height={16} />
+        <Image src={`/${type}.png`} alt="" width={16} height={16} />
       </button>
       {open && (
         <div className="w-screen h-screen absolute left-0 top-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">
           <div className="bg-white p-4 rounded-md relative w-[90%] md:w-[70%] lg:w-[60%] xl:w-[50%] 2xl:w-[40%]">
             <Form />
             <div className="absolute top-4 right-4 cursor-pointer" onClick={() => setOpen(false)}>
-              <Image src="/close.png" alt="close" width={14} height={14} />
+              <Image src="/close.png" alt="" width={14} height={14} />
             </div>
           </div>
         </div>
