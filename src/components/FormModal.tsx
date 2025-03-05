@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteClass, deleteSubject, deleteTeacher } from '@/lib/actions';
+import { deleteClass, deleteExam, deleteStudent, deleteSubject, deleteTeacher } from '@/lib/actions';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -19,10 +19,10 @@ const deleteActionMap: Partial<Record<TableType, ServerAction>> = {
   subject: deleteSubject,
   teacher: deleteTeacher,
   class: deleteClass,
-  // student: deleteSubject, // temporary placeholder
+  student: deleteStudent,
   // parent: deleteSubject, // temporary placeholder
   // lesson: deleteSubject, // temporary placeholder
-  // exam: deleteSubject, // temporary placeholder
+  exam: deleteExam,
   // assignment: deleteSubject, // temporary placeholder
   // result: deleteSubject, // temporary placeholder
   // attendance: deleteSubject, // temporary placeholder
@@ -43,6 +43,9 @@ const SubjectForm = dynamic(() => import('./forms/SubjectForm'), {
 const ClassForm = dynamic(() => import('./forms/ClassForm'), {
   loading: () => <h1>Loading...</h1>,
 });
+const ExamForm = dynamic(() => import('./forms/ExamForm'), {
+  loading: () => <h1>Loading...</h1>,
+});
 
 const forms: {
   [key: string]: (
@@ -59,10 +62,13 @@ const forms: {
     <TeacherForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
   ),
   student: (type, setOpen, data, relatedData) => (
-    <StudentForm type={type} data={data} setOpen={setOpen} />
+    <StudentForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
   ),
   class: (type, setOpen, data, relatedData) => (
     <ClassForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
+  ),
+  exam: (type, setOpen, data, relatedData) => (
+    <ExamForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
   ),
 };
 

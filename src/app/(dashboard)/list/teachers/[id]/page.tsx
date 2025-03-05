@@ -1,4 +1,5 @@
 import Announcements from '@/components/Announcements';
+import BigCalendarContainer from '@/components/BigCalendarContainer';
 import BigCalender from '@/components/BigCalender';
 import FormContainer from '@/components/FormContainer';
 import FormModal from '@/components/FormModal';
@@ -32,7 +33,7 @@ const TeacherDetails = async ({ params }: { params: { id: string } }) => {
   });
 
   if (!teacher) {
-    return notFound;
+    return notFound();
   }
 
   return (
@@ -147,7 +148,7 @@ const TeacherDetails = async ({ params }: { params: { id: string } }) => {
         {/* bottom */}
         <div className="mt-4 bg-white rounded-md p-4 h-[800px]">
           <h1 className="text-xl font-semibold">Teacher&apos;s Schedule</h1>
-          <BigCalender />
+          <BigCalendarContainer type="teacherId" id={teacher.id} />
         </div>
       </div>
       {/* right */}
