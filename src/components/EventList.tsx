@@ -1,8 +1,10 @@
 import prisma from '@/lib/prisma';
 
 const EventList = async ({ dateParam }: { dateParam: string | undefined }) => {
+  // get the date
   const date = dateParam ? new Date(dateParam) : new Date();
 
+  // get the events
   const data = await prisma.event.findMany({
     where: {
       startTime: {
@@ -17,8 +19,10 @@ const EventList = async ({ dateParam }: { dateParam: string | undefined }) => {
       className="p-5 rounded-md border-2 border-gray-100 border-t-4 odd:border-t-customSky even:border-t-customPurple"
       key={event.id}
     >
+      {/* title */}
       <div className="flex items-center justify-between">
         <h1 className="font-semibold text-gray-600">{event.title}</h1>
+        {/* time */}
         <span className="text-gray-300 text-xs">
           {event.startTime.toLocaleTimeString('en-UK', {
             hour: '2-digit',
@@ -27,6 +31,7 @@ const EventList = async ({ dateParam }: { dateParam: string | undefined }) => {
           })}
         </span>
       </div>
+      {/* description */}
       <p className="mt-2 text-gray-400 text-sm">{event.description}</p>
     </div>
   ));

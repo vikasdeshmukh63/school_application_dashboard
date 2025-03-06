@@ -29,6 +29,7 @@ const AssignmentForm = ({
     resolver: zodResolver(assignmentSchema),
   });
 
+  // form state
   const [state, formAction] = useFormState(
     type === 'create' ? createAssignment : updateAssignment,
     {
@@ -37,12 +38,15 @@ const AssignmentForm = ({
     }
   );
 
+  // on submit
   const onSubmit = handleSubmit(data => {
     formAction(data);
   });
 
+  // router
   const router = useRouter();
 
+  // after form submission
   useEffect(() => {
     if (state.success) {
       toast.success(`Assignment has been ${type === 'create' ? 'created' : 'updated'}!`);
@@ -51,9 +55,10 @@ const AssignmentForm = ({
     }
   }, [state, router, type, setOpen]);
 
+  // lessons
   const { lessons } = relatedData;
 
-  // Format date for datetime-local input
+  // format date for datetime-local input
   const formatDateForInput = (date: Date) => {
     if (!date) return '';
     const d = new Date(date);
@@ -67,11 +72,13 @@ const AssignmentForm = ({
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
+      {/* title */}
       <h1 className="text-xl font-semibold">
         {type === 'create' ? 'Create a new assignment' : 'Update the assignment'}
       </h1>
 
       <div className="flex justify-between flex-wrap gap-4">
+        {/* title */}
         <InputField
           label="Title"
           name="title"
@@ -79,6 +86,7 @@ const AssignmentForm = ({
           register={register}
           error={errors?.title}
         />
+        {/* start date */}
         <InputField
           label="Start Date"
           name="startDate"
@@ -87,6 +95,7 @@ const AssignmentForm = ({
           error={errors?.startDate}
           type="datetime-local"
         />
+        {/* due date */}
         <InputField
           label="Due Date"
           name="dueDate"
@@ -95,6 +104,7 @@ const AssignmentForm = ({
           error={errors?.dueDate}
           type="datetime-local"
         />
+        {/* id */}
         {data && (
           <InputField
             label="Id"
@@ -105,6 +115,7 @@ const AssignmentForm = ({
             hidden
           />
         )}
+        {/* lesson */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Lesson</label>
           <select
@@ -123,7 +134,9 @@ const AssignmentForm = ({
           )}
         </div>
       </div>
+      {/* error */}
       {state.error && <span className="text-red-500">Something went wrong!</span>}
+      {/* button */}
       <button type="submit" className="bg-blue-400 text-white p-2 rounded-md">
         {type === 'create' ? 'Create' : 'Update'}
       </button>

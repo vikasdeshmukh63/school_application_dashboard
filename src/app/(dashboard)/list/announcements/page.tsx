@@ -1,5 +1,4 @@
 import FormContainer from '@/components/FormContainer';
-import FormModal from '@/components/FormModal';
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
 import TableSearch from '@/components/TableSearch';
@@ -7,23 +6,29 @@ import prisma from '@/lib/prisma';
 import { ITEM_PER_PAGE } from '@/lib/settings';
 import { getUserId, getUserRole } from '@/utils/utils';
 import { Announcement, Class, Prisma } from '@prisma/client';
-import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
+// announcement list type
 type AnnouncementList = Announcement & {
   class: Class;
 };
 
 const renderRow = async (item: AnnouncementList) => {
+  // user role
   const role = await getUserRole();
+
   return (
     <tr
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-customPurpleLight"
     >
+      {/* title */}
       <td className="flex items-center gap-4 p-4">{item.title}</td>
+      {/* class */}
       <td>{item.class?.name || '-'}</td>
+      {/* date */}
       <td className="hidden md:table-cell">{new Intl.DateTimeFormat('en-IN').format(item.date)}</td>
+      {/* actions */}
       <td>
         <div className="flex items-center gap-2">
           {role === 'admin' && (
@@ -43,9 +48,12 @@ const AnnouncementListPage = async ({
 }: {
   searchParams: { [key: string]: string } | undefined;
 }) => {
+  // user role
   const role = await getUserRole();
+  // user id
   const userId = await getUserId();
 
+  // columns
   const columns = [
     {
       header: 'Title',
@@ -115,6 +123,7 @@ const AnnouncementListPage = async ({
     parent: { students: { some: { parentId: userId! } } },
   };
 
+  // role conditions
   if (role !== 'admin') {
     query.OR = [
       { classId: null },
@@ -124,6 +133,7 @@ const AnnouncementListPage = async ({
     ];
   }
 
+  // getting data
   const [data, count] = await prisma.$transaction([
     // get events
     prisma.announcement.findMany({

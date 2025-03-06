@@ -1,16 +1,19 @@
 import { auth } from '@clerk/nextjs/server';
 
+// ! get user role
 export async function getUserRole() {
   const { sessionClaims } = await auth();
   const role = (sessionClaims?.metadata as { role?: string })?.role;
   return role;
 }
 
+// ! get user id
 export async function getUserId() {
   const { userId } = await auth();
   return userId;
 }
 
+// ! get latest monday
 const getLatestMonday = (): Date => {
   const today = new Date();
   const dayOfWeek = today.getDay();
@@ -20,6 +23,7 @@ const getLatestMonday = (): Date => {
   return latestMonday;
 };
 
+// ! adjust schedule to current week
 export const adjustScheduleToCurrentWeek = (
   lessons: { title: string; start: Date; end: Date }[]
 ): { title: string; start: Date; end: Date }[] => {

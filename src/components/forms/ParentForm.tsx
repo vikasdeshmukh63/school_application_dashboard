@@ -29,17 +29,21 @@ const ParentForm = ({
     resolver: zodResolver(parentSchema),
   });
 
+  // form state
   const [state, formAction] = useFormState(type === 'create' ? createParent : updateParent, {
     success: false,
     error: false,
   });
 
+  // on submit
   const onSubmit = handleSubmit(data => {
     formAction(data);
   });
 
+  // router
   const router = useRouter();
 
+  // after form submission
   useEffect(() => {
     if (state.success) {
       toast.success(`Parent has been ${type === 'create' ? 'created' : 'updated'}!`);
@@ -48,15 +52,19 @@ const ParentForm = ({
     }
   }, [state, router, type, setOpen]);
 
+  // students
   const { students } = relatedData;
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
+      {/* title */}
       <h1 className="text-xl font-semibold">
         {type === 'create' ? 'Create a new parent' : 'Update the parent'}
       </h1>
+      {/* authentication information */}
       <span className="text-xs text-gray-400 font-medium">Authentication Information</span>
       <div className="flex justify-between flex-wrap gap-4">
+        {/* username */}
         <InputField
           label="Username"
           name="username"
@@ -64,6 +72,7 @@ const ParentForm = ({
           register={register}
           error={errors?.username}
         />
+        {/* email */}
         <InputField
           label="Email"
           name="email"
@@ -71,6 +80,7 @@ const ParentForm = ({
           register={register}
           error={errors?.email}
         />
+        {/* password */}
         <InputField
           label="Password"
           name="password"
@@ -80,8 +90,10 @@ const ParentForm = ({
           error={errors?.password}
         />
       </div>
+      {/* personal information */}
       <span className="text-xs text-gray-400 font-medium">Personal Information</span>
       <div className="flex justify-between flex-wrap gap-4">
+        {/* first name */}
         <InputField
           label="First Name"
           name="name"
@@ -89,6 +101,7 @@ const ParentForm = ({
           register={register}
           error={errors.name}
         />
+        {/* last name */}
         <InputField
           label="Last Name"
           name="surname"
@@ -96,6 +109,7 @@ const ParentForm = ({
           register={register}
           error={errors.surname}
         />
+        {/* phone */}
         <InputField
           label="Phone"
           name="phone"
@@ -103,6 +117,7 @@ const ParentForm = ({
           register={register}
           error={errors.phone}
         />
+        {/* address */}
         <InputField
           label="Address"
           name="address"
@@ -110,6 +125,7 @@ const ParentForm = ({
           register={register}
           error={errors.address}
         />
+        {/* id */}
         {data && (
           <InputField
             label="Id"
@@ -120,7 +136,7 @@ const ParentForm = ({
             hidden
           />
         )}
-
+        {/* students */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Students</label>
           <select
@@ -140,7 +156,9 @@ const ParentForm = ({
           )}
         </div>
       </div>
+      {/* error */}
       {state.error && <span className="text-red-500">Something went wrong!</span>}
+      {/* button */}
       <button type="submit" className="bg-blue-400 text-white p-2 rounded-md">
         {type === 'create' ? 'Create' : 'Update'}
       </button>

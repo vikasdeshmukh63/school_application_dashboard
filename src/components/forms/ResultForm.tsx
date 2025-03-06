@@ -29,17 +29,21 @@ const ResultForm = ({
     resolver: zodResolver(resultSchema),
   });
 
+  // form state
   const [state, formAction] = useFormState(type === 'create' ? createResult : updateResult, {
     success: false,
     error: false,
   });
 
+  // on submit
   const onSubmit = handleSubmit(data => {
     formAction(data);
   });
 
+  // router
   const router = useRouter();
 
+  // after form submission
   useEffect(() => {
     if (state.success) {
       toast.success(`Result has been ${type === 'create' ? 'created' : 'updated'}!`);
@@ -48,15 +52,18 @@ const ResultForm = ({
     }
   }, [state, router, type, setOpen]);
 
+  // students, exams, assignments
   const { students, exams, assignments } = relatedData;
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
+      {/* title */}
       <h1 className="text-xl font-semibold">
         {type === 'create' ? 'Create a new result' : 'Update the result'}
       </h1>
 
       <div className="flex justify-between flex-wrap gap-4">
+        {/* score */}
         <InputField
           label="Score"
           name="score"
@@ -67,6 +74,7 @@ const ResultForm = ({
           register={register}
           error={errors?.score}
         />
+        {/* id */}
         {data && (
           <InputField
             label="Id"
@@ -77,6 +85,7 @@ const ResultForm = ({
             hidden
           />
         )}
+        {/* student */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Student</label>
           <select
@@ -94,6 +103,7 @@ const ResultForm = ({
             <p className="text-xs text-red-400">{errors.studentId.message.toString()}</p>
           )}
         </div>
+        {/* exam */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Exam</label>
           <select
@@ -112,6 +122,7 @@ const ResultForm = ({
             <p className="text-xs text-red-400">{errors.examId.message.toString()}</p>
           )}
         </div>
+        {/* assignment */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Assignment</label>
           <select
@@ -131,7 +142,9 @@ const ResultForm = ({
           )}
         </div>
       </div>
+      {/* error */}
       {state.error && <span className="text-red-500">Something went wrong!</span>}
+      {/* button */}
       <button type="submit" className="bg-blue-400 text-white p-2 rounded-md">
         {type === 'create' ? 'Create' : 'Update'}
       </button>

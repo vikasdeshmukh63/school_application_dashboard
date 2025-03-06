@@ -1,5 +1,4 @@
 import FormContainer from '@/components/FormContainer';
-import FormModal from '@/components/FormModal';
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
 import TableSearch from '@/components/TableSearch';
@@ -7,31 +6,37 @@ import prisma from '@/lib/prisma';
 import { ITEM_PER_PAGE } from '@/lib/settings';
 import { getUserRole } from '@/utils/utils';
 import { Parent, Prisma, Student } from '@prisma/client';
-import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
+// parent list type
 type ParentList = Parent & {
   students: Student[];
 };
 
 const renderRow = async (item: ParentList) => {
+  // user role
   const role = await getUserRole();
   return (
     <tr
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-customPurpleLight"
     >
+      {/* info */}
       <td className="flex items-center gap-4 p-4">
         <div className="flex flex-col">
           <h3 className="font-semibold">{item.name}</h3>
           <p className="text-xs text-gray-500">{item?.email}</p>
         </div>
       </td>
+      {/* student names */}
       <td className="hidden md:table-cell">
         {item.students.map(student => student.name).join(',')}
       </td>
+      {/* phone */}
       <td className="hidden md:table-cell">{item.phone}</td>
+      {/* address */}
       <td className="hidden md:table-cell">{item.address}</td>
+      {/* actions */}
       <td>
         <div className="flex items-center gap-2">
           {role === 'admin' && (
@@ -51,8 +56,10 @@ const ParentListPage = async ({
 }: {
   searchParams: { [key: string]: string } | undefined;
 }) => {
+  // user role
   const role = await getUserRole();
 
+  // columns
   const columns = [
     {
       header: 'Info',
@@ -146,7 +153,7 @@ const ParentListPage = async ({
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-             {/* <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
+            {/* <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               <SlidersHorizontal className="h-6 w-6" />
             </button>
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">

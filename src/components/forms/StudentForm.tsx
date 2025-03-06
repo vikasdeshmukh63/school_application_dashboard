@@ -32,21 +32,26 @@ const StudentForm = ({
     resolver: zodResolver(studentSchema),
   });
 
+  // image
   const [img, setImg] = useState<any>();
 
+  // form state
   const [state, formAction] = useFormState(type === 'create' ? createStudent : updateStudent, {
     success: false,
     error: false,
   });
 
+  // on submit
   const onSubmit = handleSubmit(data => {
     console.log('hello');
     console.log(data);
     formAction({ ...data, img: img?.secure_url });
   });
 
+  // router
   const router = useRouter();
 
+  // after form submission
   useEffect(() => {
     if (state.success) {
       toast.success(`Student has been ${type === 'create' ? 'created' : 'updated'}!`);
@@ -55,15 +60,19 @@ const StudentForm = ({
     }
   }, [state, router, type, setOpen]);
 
+  // grades, classes
   const { grades, classes } = relatedData;
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
+      {/* title */}
       <h1 className="text-xl font-semibold">
         {type === 'create' ? 'Create a new student' : 'Update the student'}
       </h1>
+      {/* authentication information */}
       <span className="text-xs text-gray-400 font-medium">Authentication Information</span>
       <div className="flex justify-between flex-wrap gap-4">
+        {/* username */}
         <InputField
           label="Username"
           name="username"
@@ -71,6 +80,7 @@ const StudentForm = ({
           register={register}
           error={errors?.username}
         />
+        {/* email */}
         <InputField
           label="Email"
           name="email"
@@ -78,6 +88,7 @@ const StudentForm = ({
           register={register}
           error={errors?.email}
         />
+        {/* password */}
         <InputField
           label="Password"
           name="password"
@@ -87,8 +98,11 @@ const StudentForm = ({
           error={errors?.password}
         />
       </div>
+      {/* personal information */}
       <span className="text-xs text-gray-400 font-medium">Personal Information</span>
+      {/* image */}
       {img && <Image src={img.secure_url} alt="" width={100} height={100} />}
+      {/* upload image */}
       <CldUploadWidget
         uploadPreset="school"
         onSuccess={(result, { widget }) => {
@@ -109,6 +123,7 @@ const StudentForm = ({
         }}
       </CldUploadWidget>
       <div className="flex justify-between flex-wrap gap-4">
+        {/* first name */}
         <InputField
           label="First Name"
           name="name"
@@ -116,6 +131,7 @@ const StudentForm = ({
           register={register}
           error={errors.name}
         />
+        {/* last name */}
         <InputField
           label="Last Name"
           name="surname"
@@ -123,6 +139,7 @@ const StudentForm = ({
           register={register}
           error={errors.surname}
         />
+        {/* phone */}
         <InputField
           label="Phone"
           name="phone"
@@ -130,6 +147,7 @@ const StudentForm = ({
           register={register}
           error={errors.phone}
         />
+        {/* address */}
         <InputField
           label="Address"
           name="address"
@@ -137,6 +155,7 @@ const StudentForm = ({
           register={register}
           error={errors.address}
         />
+        {/* blood type */}
         <InputField
           label="Blood Type"
           name="bloodType"
@@ -144,6 +163,7 @@ const StudentForm = ({
           register={register}
           error={errors.bloodType}
         />
+        {/* birthday */}
         <InputField
           label="Birthday"
           name="birthday"
@@ -152,6 +172,7 @@ const StudentForm = ({
           error={errors.birthday}
           type="date"
         />
+        {/* parent id */}
         <InputField
           label="Parent Id"
           name="parentId"
@@ -159,6 +180,7 @@ const StudentForm = ({
           register={register}
           error={errors.parentId}
         />
+        {/* id */}
         {data && (
           <InputField
             label="Id"
@@ -169,6 +191,7 @@ const StudentForm = ({
             hidden
           />
         )}
+        {/* gender */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Gender</label>
           <select
@@ -183,6 +206,7 @@ const StudentForm = ({
             <p className="text-xs text-red-400">{errors.gender.message.toString()}</p>
           )}
         </div>
+        {/* grade */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Grade</label>
           <select
@@ -200,6 +224,7 @@ const StudentForm = ({
             <p className="text-xs text-red-400">{errors.gradeId.message.toString()}</p>
           )}
         </div>
+        {/* class */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Class</label>
           <select
@@ -226,7 +251,9 @@ const StudentForm = ({
           )}
         </div>
       </div>
+      {/* error */}
       {state.error && <span className="text-red-500">Something went wrong!</span>}
+      {/* button */}
       <button type="submit" className="bg-blue-400 text-white p-2 rounded-md">
         {type === 'create' ? 'Create' : 'Update'}
       </button>

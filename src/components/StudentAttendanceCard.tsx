@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 
 const StudentAttendanceCard = async ({ id }: { id: string }) => {
+  // get the attendance
   const attendance = await prisma.attendance.findMany({
     where: {
       studentId: id,
@@ -10,9 +11,15 @@ const StudentAttendanceCard = async ({ id }: { id: string }) => {
     },
   });
 
+  // get the total days
   const totalDays = attendance.length;
+
+  // get the present days
   const presentDays = attendance.filter(day => day.present).length;
+
+  // get the percentage
   const percentage = (presentDays / totalDays) * 100;
+
   return (
     <div>
       <h1 className="text-xl font-semibold">{percentage || '-'}%</h1>

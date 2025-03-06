@@ -1,5 +1,4 @@
 import FormContainer from '@/components/FormContainer';
-import FormModal from '@/components/FormModal';
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
 import TableSearch from '@/components/TableSearch';
@@ -7,9 +6,9 @@ import prisma from '@/lib/prisma';
 import { ITEM_PER_PAGE } from '@/lib/settings';
 import { getUserId, getUserRole } from '@/utils/utils';
 import { Assignment, Class, Lesson, Prisma, Subject, Teacher } from '@prisma/client';
-import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
+// assignment list type
 type AssignmentList = Assignment & {
   lesson: Lesson & {
     subject: Subject;
@@ -19,20 +18,26 @@ type AssignmentList = Assignment & {
 };
 
 const renderRow = async (item: AssignmentList) => {
+  // user role
   const role = await getUserRole();
   return (
     <tr
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-customPurpleLight"
     >
+      {/* subject name */}
       <td className="flex items-center gap-4 p-4">{item.lesson.subject.name}</td>
+      {/* class */}
       <td>{item.lesson.class.name}</td>
+      {/* teacher */}
       <td className="hidden md:table-cell">
         {item.lesson.teacher.name + ' ' + item.lesson.teacher.surname}
       </td>
+      {/* due date */}
       <td className="hidden md:table-cell">
         {new Intl.DateTimeFormat('en-IN').format(item.dueDate)}
       </td>
+      {/* actions */}
       <td>
         <div className="flex items-center gap-2">
           {(role === 'admin' || role === 'teacher') && (
@@ -52,9 +57,12 @@ const AssignmentListPage = async ({
 }: {
   searchParams: { [key: string]: string } | undefined;
 }) => {
+  // user role
   const role = await getUserRole();
+  // user id
   const userId = await getUserId();
 
+  // columns
   const columns = [
     {
       header: 'Subject Name',
@@ -159,6 +167,7 @@ const AssignmentListPage = async ({
       break;
   }
 
+  // getting data
   const [data, count] = await prisma.$transaction([
     // get teachers
     prisma.assignment.findMany({

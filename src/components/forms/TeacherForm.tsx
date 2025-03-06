@@ -32,20 +32,25 @@ const TeacherForm = ({
     resolver: zodResolver(teacherSchema),
   });
 
+  // image
   const [img, setImg] = useState<any>();
 
+  // form state
   const [state, formAction] = useFormState(type === 'create' ? createTeacher : updateTeacher, {
     success: false,
     error: false,
   });
 
+  // on submit
   const onSubmit = handleSubmit(data => {
     console.log(data);
     formAction({ ...data, img: img?.secure_url });
   });
 
+  // router
   const router = useRouter();
 
+  // after form submission
   useEffect(() => {
     if (state.success) {
       toast.success(`Teacher has been ${type === 'create' ? 'created' : 'updated'}!`);
@@ -54,15 +59,19 @@ const TeacherForm = ({
     }
   }, [state, router, type, setOpen]);
 
+  // subjects
   const { subjects } = relatedData;
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
+      {/* title */}
       <h1 className="text-xl font-semibold">
         {type === 'create' ? 'Create a new teacher' : 'Update the teacher'}
       </h1>
+      {/* authentication information */}
       <span className="text-xs text-gray-400 font-medium">Authentication Information</span>
       <div className="flex justify-between flex-wrap gap-4">
+        {/* username */}
         <InputField
           label="Username"
           name="username"
@@ -70,6 +79,7 @@ const TeacherForm = ({
           register={register}
           error={errors?.username}
         />
+        {/* email */}
         <InputField
           label="Email"
           name="email"
@@ -77,6 +87,7 @@ const TeacherForm = ({
           register={register}
           error={errors?.email}
         />
+        {/* password */}
         <InputField
           label="Password"
           name="password"
@@ -88,6 +99,7 @@ const TeacherForm = ({
       </div>
       <span className="text-xs text-gray-400 font-medium">Personal Information</span>
       <div className="flex justify-between flex-wrap gap-4">
+        {/* first name */}
         <InputField
           label="First Name"
           name="name"
@@ -95,6 +107,7 @@ const TeacherForm = ({
           register={register}
           error={errors.name}
         />
+        {/* last name */}
         <InputField
           label="Last Name"
           name="surname"
@@ -102,6 +115,7 @@ const TeacherForm = ({
           register={register}
           error={errors.surname}
         />
+        {/* phone */}
         <InputField
           label="Phone"
           name="phone"
@@ -109,6 +123,7 @@ const TeacherForm = ({
           register={register}
           error={errors.phone}
         />
+        {/* address */}
         <InputField
           label="Address"
           name="address"
@@ -116,6 +131,7 @@ const TeacherForm = ({
           register={register}
           error={errors.address}
         />
+        {/* blood type */}
         <InputField
           label="Blood Type"
           name="bloodType"
@@ -123,6 +139,7 @@ const TeacherForm = ({
           register={register}
           error={errors.bloodType}
         />
+        {/* birthday */}
         <InputField
           label="Birthday"
           name="birthday"
@@ -131,6 +148,7 @@ const TeacherForm = ({
           error={errors.birthday}
           type="date"
         />
+        {/* id */}
         {data && (
           <InputField
             label="Id"
@@ -141,6 +159,7 @@ const TeacherForm = ({
             hidden
           />
         )}
+        {/* gender */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500"> Gender</label>
           <select
@@ -155,6 +174,7 @@ const TeacherForm = ({
             <p className="text-xs text-red-400">{errors.gender.message.toString()}</p>
           )}
         </div>
+        {/* subjects */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Subjects</label>
           <select
@@ -173,8 +193,9 @@ const TeacherForm = ({
             <p className="text-xs text-red-400">{errors.subjects.message.toString()}</p>
           )}
         </div>
-        {console.log(img)}
+        {/* image */}
         {img && <Image src={img.secure_url} alt="" width={100} height={100} />}
+        {/* upload image */}
         <CldUploadWidget
           uploadPreset="school"
           onSuccess={(result, { widget }) => {
@@ -195,7 +216,9 @@ const TeacherForm = ({
           }}
         </CldUploadWidget>
       </div>
+      {/* error */}
       {state.error && <span className="text-red-500">Something went wrong!</span>}
+      {/* button */}
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === 'create' ? 'Create' : 'Update'}
       </button>

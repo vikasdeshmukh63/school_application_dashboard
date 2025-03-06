@@ -1,5 +1,6 @@
 import { FieldError } from 'react-hook-form';
 
+// input field props
 type InputFieldProps = {
   label: string;
   type?: string;
@@ -13,6 +14,7 @@ type InputFieldProps = {
   max?: number;
 };
 
+// input field component
 const InputField = ({
   label,
   type = 'text',
@@ -27,7 +29,9 @@ const InputField = ({
 }: InputFieldProps) => {
   return (
     <div className={hidden ? 'hidden' : 'flex flex-col gap-2 w-full md:w-1/4'}>
+      {/* label */}
       <label className="text-xs text-gray-500">{label}</label>
+      {/* input */}
       <input
         type={type}
         {...register(name)}
@@ -38,6 +42,7 @@ const InputField = ({
         min={min}
         max={max}
       />
+      {/* error */}
       {error?.message && <p className="text-xs text-red-400">{error.message.toString()}</p>}
     </div>
   );

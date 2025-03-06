@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 import { currentUser } from '@clerk/nextjs/server';
 import { getUserId, getUserRole } from '@/utils/utils';
 
+//all possible table types
 export type TableType =
   | 'teacher'
   | 'student'
@@ -18,6 +19,7 @@ export type TableType =
   | 'event'
   | 'announcement';
 
+// props type
 export type FormContainerProps = {
   table: TableType;
   type: 'create' | 'update' | 'delete';
@@ -26,10 +28,13 @@ export type FormContainerProps = {
 };
 
 const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
+  //related data object
   let relatedData = {};
+  // user role and id
   const role = await getUserRole();
   const userId = await getUserId();
 
+  // fetching data for create and update
   if (type !== 'delete') {
     switch (table) {
       case 'subject':
@@ -154,7 +159,7 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
         break;
     }
   }
-  
+
   return (
     <div>
       <FormModal table={table} type={type} data={data} id={id} relatedData={relatedData} />

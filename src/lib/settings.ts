@@ -1,9 +1,11 @@
 export const ITEM_PER_PAGE = 10;
 
+// ! route access map
 type RouteAccessMap = {
   [key: string]: string[];
 };
 
+// ! route access map
 export const routeAccessMap: RouteAccessMap = {
   '/admin(.*)': ['admin'],
   '/student(.*)': ['student'],

@@ -12,18 +12,22 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+// student list type
 type StudentList = Student & {
   class: Class;
 };
 
 const renderRow = async (item: StudentList) => {
+  // user role
   const role = await getUserRole();
+
   return (
     <tr
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-customPurpleLight"
     >
       <td className="flex items-center gap-4 p-4">
+        {/* image */}
         <Image
           src={item.img || '/noAvatar.png'}
           alt=""
@@ -32,21 +36,30 @@ const renderRow = async (item: StudentList) => {
           className="md:hidden xl:block w-10 h-10 rounded-full object-cover"
         />
         <div className="flex flex-col">
+          {/* name */}
           <h3 className="font-semibold">{item.name}</h3>
+          {/* class */}
           <p className="text-xs text-gray-500">{item.class?.name}</p>
         </div>
       </td>
+      {/* student id */}
       <td className="hidden md:table-cell">{item.username}</td>
+      {/* grade */}
       <td className="hidden md:table-cell">{item.class?.name[0]}</td>
+      {/* phone */}
       <td className="hidden md:table-cell">{item.phone}</td>
+      {/* address */}
       <td className="hidden md:table-cell">{item.address}</td>
+      {/* actions */}
       <td>
         <div className="flex items-center gap-2">
+          {/* view */}
           <Link href={`/list/students/${item.id}`}>
             <button className="w-7 h-7 flex items-center justify-center rounded-full bg-customSky">
               <Eye className="h-4 w-4" />
             </button>
           </Link>
+          {/* delete */}
           {role === 'admin' && <FormContainer table="student" type="delete" id={item.id} />}
         </div>
       </td>
@@ -164,7 +177,7 @@ const StudentListPage = async ({
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-             {/* <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
+            {/* <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               <SlidersHorizontal className="h-6 w-6" />
             </button>
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">

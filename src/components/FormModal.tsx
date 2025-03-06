@@ -1,18 +1,19 @@
 'use client';
 
 import {
+  deleteAnnouncement,
+  deleteAssignment,
   deleteClass,
+  deleteEvent,
   deleteExam,
+  deleteLesson,
+  deleteParent,
+  deleteResult,
   deleteStudent,
   deleteSubject,
   deleteTeacher,
-  deleteParent,
-  deleteLesson,
-  deleteAssignment,
-  deleteEvent,
-  deleteAnnouncement,
-  deleteResult,
 } from '@/lib/actions';
+import { X } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -20,7 +21,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
 import { toast } from 'react-toastify';
 import { FormContainerProps, TableType } from './FormContainer';
-import { X } from 'lucide-react';
 
 type ServerAction = (
   currentState: { success: boolean; error: boolean },
@@ -78,6 +78,7 @@ const ResultForm = dynamic(() => import('./forms/ResultForm'), {
   loading: () => <h1>Loading...</h1>,
 });
 
+// form components map
 const forms: {
   [key: string]: (
     type: 'create' | 'update',
@@ -121,6 +122,7 @@ const forms: {
   ),
 };
 
+// form modal component
 const FormModal = ({
   table,
   type,
@@ -134,8 +136,11 @@ const FormModal = ({
 
   const [open, setOpen] = useState(false);
 
+  // form component
   const Form = () => {
+    // delete action
     const deleteAction = deleteActionMap[table];
+    // form state
     const [state, formAction] = useFormState(
       deleteAction || (() => Promise.resolve({ success: false, error: false })),
       {
@@ -143,8 +148,10 @@ const FormModal = ({
         error: false,
       }
     );
+    // router
     const router = useRouter();
 
+    // after completion of action
     useEffect(() => {
       if (state.success) {
         toast.success(`${table} has been deleted successfully`);

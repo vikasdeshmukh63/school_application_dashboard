@@ -26,4 +26,3 @@ services:
       NEXT_PUBLIC_CLOUDINARY_API_KEY: 893684614275511
     depends_on:
       - postgres
-      

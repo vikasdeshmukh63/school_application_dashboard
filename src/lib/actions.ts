@@ -1,31 +1,26 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { getUserId, getUserRole } from '@/utils/utils';
+import { clerkClient } from '@clerk/nextjs/server';
 import {
   AnnouncementSchema,
-  announcementSchema,
   AssignmentSchema,
-  assignmentSchema,
   ClassSchema,
   EventSchema,
-  eventSchema,
   ExamSchema,
   LessonSchema,
-  lessonSchema,
   ParentSchema,
-  parentSchema,
   ResultSchema,
-  resultSchema,
   StudentSchema,
   SubjectSchema,
   TeacherSchema,
 } from './formValidationSchemas';
 import prisma from './prisma';
-import { clerkClient } from '@clerk/nextjs/server';
-import { getUserId, getUserRole } from '@/utils/utils';
 
+// current state
 type CurrentState = { success: boolean; error: boolean };
 
+// ! create subject
 export const createSubject = async (currentState: CurrentState, data: SubjectSchema) => {
   try {
     await prisma.subject.create({
@@ -44,6 +39,7 @@ export const createSubject = async (currentState: CurrentState, data: SubjectSch
   }
 };
 
+// ! update subject
 export const updateSubject = async (currentState: CurrentState, data: SubjectSchema) => {
   try {
     await prisma.subject.update({
@@ -65,6 +61,7 @@ export const updateSubject = async (currentState: CurrentState, data: SubjectSch
   }
 };
 
+// ! delete subject
 export const deleteSubject = async (currentState: CurrentState, data: FormData) => {
   const id = data.get('id') as string;
   try {
@@ -81,6 +78,7 @@ export const deleteSubject = async (currentState: CurrentState, data: FormData) 
   }
 };
 
+// ! create class
 export const createClass = async (currentState: CurrentState, data: ClassSchema) => {
   try {
     await prisma.class.create({
@@ -94,6 +92,7 @@ export const createClass = async (currentState: CurrentState, data: ClassSchema)
   }
 };
 
+// ! update class
 export const updateClass = async (currentState: CurrentState, data: ClassSchema) => {
   try {
     await prisma.class.update({
@@ -110,6 +109,7 @@ export const updateClass = async (currentState: CurrentState, data: ClassSchema)
   }
 };
 
+// ! delete class
 export const deleteClass = async (currentState: CurrentState, data: FormData) => {
   const id = data.get('id') as string;
   try {
@@ -126,8 +126,10 @@ export const deleteClass = async (currentState: CurrentState, data: FormData) =>
   }
 };
 
+// ! create teacher
 export const createTeacher = async (currentState: CurrentState, data: TeacherSchema) => {
   try {
+    // create user in clerk
     const user = await (
       await clerkClient()
     ).users.createUser({
@@ -138,6 +140,7 @@ export const createTeacher = async (currentState: CurrentState, data: TeacherSch
       publicMetadata: { role: 'teacher' },
     });
 
+    // create teacher in database
     await prisma.teacher.create({
       data: {
         id: user.id,
@@ -159,7 +162,6 @@ export const createTeacher = async (currentState: CurrentState, data: TeacherSch
       },
     });
 
-    // revalidatePath("/list/teachers");
     return { success: true, error: false };
   } catch (err) {
     console.log(err);
@@ -167,11 +169,14 @@ export const createTeacher = async (currentState: CurrentState, data: TeacherSch
   }
 };
 
+// ! update teacher
 export const updateTeacher = async (currentState: CurrentState, data: TeacherSchema) => {
+  // if id is not provided, return error
   if (!data.id) {
     return { success: false, error: true };
   }
   try {
+    // update user in clerk
     const user = await (
       await clerkClient()
     ).users.updateUser(data.id, {
@@ -181,6 +186,7 @@ export const updateTeacher = async (currentState: CurrentState, data: TeacherSch
       lastName: data.surname,
     });
 
+    // update teacher in database
     await prisma.teacher.update({
       where: {
         id: data.id,
@@ -212,6 +218,7 @@ export const updateTeacher = async (currentState: CurrentState, data: TeacherSch
   }
 };
 
+// ! delete teacher
 export const deleteTeacher = async (currentState: CurrentState, data: FormData) => {
   const id = data.get('id') as string;
   try {
@@ -230,18 +237,21 @@ export const deleteTeacher = async (currentState: CurrentState, data: FormData) 
   }
 };
 
+// ! create student
 export const createStudent = async (currentState: CurrentState, data: StudentSchema) => {
-  console.log(data);
   try {
+    // get the class
     const classItem = await prisma.class.findUnique({
       where: { id: data.classId },
       include: { _count: { select: { students: true } } },
     });
 
+    // if the class is full, return error
     if (classItem && classItem.capacity === classItem._count.students) {
       return { success: false, error: true };
     }
 
+    // create user in clerk
     const user = await (
       await clerkClient()
     ).users.createUser({
@@ -252,6 +262,7 @@ export const createStudent = async (currentState: CurrentState, data: StudentSch
       publicMetadata: { role: 'student' },
     });
 
+    // create student in database
     await prisma.student.create({
       data: {
         id: user.id,
@@ -271,7 +282,6 @@ export const createStudent = async (currentState: CurrentState, data: StudentSch
       },
     });
 
-    // revalidatePath("/list/students");
     return { success: true, error: false };
   } catch (err) {
     console.log(err);
@@ -279,11 +289,14 @@ export const createStudent = async (currentState: CurrentState, data: StudentSch
   }
 };
 
+// ! update student
 export const updateStudent = async (currentState: CurrentState, data: StudentSchema) => {
+  // if id is not provided, return error
   if (!data.id) {
     return { success: false, error: true };
   }
   try {
+    // update user in clerk
     const user = await (
       await clerkClient()
     ).users.updateUser(data.id, {
@@ -293,6 +306,7 @@ export const updateStudent = async (currentState: CurrentState, data: StudentSch
       lastName: data.surname,
     });
 
+    // update student in database
     await prisma.student.update({
       where: {
         id: data.id,
@@ -314,7 +328,7 @@ export const updateStudent = async (currentState: CurrentState, data: StudentSch
         parentId: data.parentId,
       },
     });
-    // revalidatePath("/list/students");
+
     return { success: true, error: false };
   } catch (err) {
     console.log(err);
@@ -322,6 +336,7 @@ export const updateStudent = async (currentState: CurrentState, data: StudentSch
   }
 };
 
+// ! delete student
 export const deleteStudent = async (currentState: CurrentState, data: FormData) => {
   const id = data.get('id') as string;
   try {
@@ -340,11 +355,14 @@ export const deleteStudent = async (currentState: CurrentState, data: FormData) 
   }
 };
 
+// ! create exam
 export const createExam = async (currentState: CurrentState, data: ExamSchema) => {
+  // get the role and user id
   const role = await getUserRole();
   const userId = await getUserId();
 
   try {
+    // if the role is teacher, check if the lesson exists
     if (role === 'teacher') {
       const teacherLesson = await prisma.lesson.findFirst({
         where: {
@@ -353,11 +371,13 @@ export const createExam = async (currentState: CurrentState, data: ExamSchema) =
         },
       });
 
+      // if the lesson does not exist, return error
       if (!teacherLesson) {
         return { success: false, error: true };
       }
     }
 
+    // create exam in database
     await prisma.exam.create({
       data: {
         title: data.title,
@@ -374,11 +394,14 @@ export const createExam = async (currentState: CurrentState, data: ExamSchema) =
   }
 };
 
+// ! update exam
 export const updateExam = async (currentState: CurrentState, data: ExamSchema) => {
+  // get the role and user id
   const role = await getUserRole();
   const userId = await getUserId();
 
   try {
+    // if the role is teacher, check if the lesson exists
     if (role === 'teacher') {
       const teacherLesson = await prisma.lesson.findFirst({
         where: {
@@ -387,11 +410,13 @@ export const updateExam = async (currentState: CurrentState, data: ExamSchema) =
         },
       });
 
+      // if the lesson does not exist, return error
       if (!teacherLesson) {
         return { success: false, error: true };
       }
     }
 
+    // update exam in database
     await prisma.exam.update({
       where: {
         id: data.id,
@@ -411,9 +436,11 @@ export const updateExam = async (currentState: CurrentState, data: ExamSchema) =
   }
 };
 
+// ! delete exam
 export const deleteExam = async (currentState: CurrentState, data: FormData) => {
   const id = data.get('id') as string;
 
+  // get the role and user id
   const role = await getUserRole();
   const userId = await getUserId();
 
@@ -432,8 +459,10 @@ export const deleteExam = async (currentState: CurrentState, data: FormData) => 
   }
 };
 
+// ! create parent
 export async function createParent(currentState: CurrentState, data: ParentSchema) {
   try {
+    // create user in clerk
     const user = await (
       await clerkClient()
     ).users.createUser({
@@ -444,6 +473,7 @@ export async function createParent(currentState: CurrentState, data: ParentSchem
       publicMetadata: { role: 'parent' },
     });
 
+    // create parent in database
     await prisma.parent.create({
       data: {
         id: user.id,
@@ -466,12 +496,14 @@ export async function createParent(currentState: CurrentState, data: ParentSchem
   }
 }
 
+// ! update parent
 export async function updateParent(currentState: CurrentState, data: ParentSchema) {
+  // if id is not provided, return error
   if (!data.id) {
     return { success: false, error: true };
   }
   try {
-    // First, update Clerk user
+    // update user in clerk
     const user = await (
       await clerkClient()
     ).users.updateUser(data.id, {
@@ -481,7 +513,7 @@ export async function updateParent(currentState: CurrentState, data: ParentSchem
       lastName: data.surname,
     });
 
-    // First, clear all student relationships for this parent
+    // clear all student relationships for this parent
     await prisma.student.updateMany({
       where: {
         parentId: data.id,
@@ -491,7 +523,7 @@ export async function updateParent(currentState: CurrentState, data: ParentSchem
       },
     });
 
-    // Then, set the new relationships
+    // set the new relationships
     if (data.students && data.students.length > 0) {
       await prisma.student.updateMany({
         where: {
@@ -505,7 +537,7 @@ export async function updateParent(currentState: CurrentState, data: ParentSchem
       });
     }
 
-    // Finally, update parent's basic information
+    // update parent's basic information
     await prisma.parent.update({
       where: {
         id: data.id,
@@ -528,11 +560,12 @@ export async function updateParent(currentState: CurrentState, data: ParentSchem
   }
 }
 
+// ! delete parent
 export async function deleteParent(currentState: CurrentState, formData: FormData) {
   const id = formData.get('id') as string;
   try {
     await prisma.$transaction(async tx => {
-      // First, remove all student relationships
+      // remove all student relationships
       await tx.student.updateMany({
         where: {
           parentId: id,
@@ -542,10 +575,10 @@ export async function deleteParent(currentState: CurrentState, formData: FormDat
         },
       });
 
-      // Then delete the Clerk user
+      // delete the user in clerk
       await (await clerkClient()).users.deleteUser(id);
 
-      // Finally delete the parent
+      // delete the parent
       await tx.parent.delete({
         where: {
           id: id,
@@ -560,6 +593,7 @@ export async function deleteParent(currentState: CurrentState, formData: FormDat
   }
 }
 
+// ! create lesson
 export async function createLesson(currentState: CurrentState, data: LessonSchema) {
   try {
     await prisma.lesson.create({
@@ -580,7 +614,9 @@ export async function createLesson(currentState: CurrentState, data: LessonSchem
   }
 }
 
+// ! update lesson
 export async function updateLesson(currentState: CurrentState, data: LessonSchema) {
+  // if id is not provided, return error
   if (!data.id) {
     return { success: false, error: true };
   }
@@ -604,6 +640,7 @@ export async function updateLesson(currentState: CurrentState, data: LessonSchem
   }
 }
 
+// ! delete lesson
 export async function deleteLesson(currentState: CurrentState, data: FormData) {
   const id = data.get('id') as string;
   try {
@@ -619,6 +656,7 @@ export async function deleteLesson(currentState: CurrentState, data: FormData) {
   }
 }
 
+// ! create assignment
 export async function createAssignment(currentState: CurrentState, data: AssignmentSchema) {
   try {
     await prisma.assignment.create({
@@ -636,6 +674,7 @@ export async function createAssignment(currentState: CurrentState, data: Assignm
   }
 }
 
+// ! update assignment
 export async function updateAssignment(currentState: CurrentState, data: AssignmentSchema) {
   try {
     await prisma.assignment.update({
@@ -656,6 +695,7 @@ export async function updateAssignment(currentState: CurrentState, data: Assignm
   }
 }
 
+// ! delete assignment
 export async function deleteAssignment(currentState: CurrentState, data: FormData) {
   const id = data.get('id') as string;
   try {
@@ -670,6 +710,8 @@ export async function deleteAssignment(currentState: CurrentState, data: FormDat
     return { success: false, error: true };
   }
 }
+
+// ! create result
 export async function createResult(currentState: CurrentState, data: ResultSchema) {
   try {
     await prisma.result.create({
@@ -680,6 +722,8 @@ export async function createResult(currentState: CurrentState, data: ResultSchem
     return { success: false, error: true };
   }
 }
+
+// ! update result
 export async function updateResult(currentState: CurrentState, data: ResultSchema) {
   try {
     await prisma.result.update({
@@ -692,6 +736,7 @@ export async function updateResult(currentState: CurrentState, data: ResultSchem
   }
 }
 
+// ! delete result
 export async function deleteResult(currentState: CurrentState, data: FormData) {
   const id = data.get('id') as string;
   try {
@@ -704,6 +749,7 @@ export async function deleteResult(currentState: CurrentState, data: FormData) {
   }
 }
 
+// ! create event
 export async function createEvent(currentState: CurrentState, data: EventSchema) {
   try {
     await prisma.event.create({
@@ -716,6 +762,7 @@ export async function createEvent(currentState: CurrentState, data: EventSchema)
   }
 }
 
+// ! update event
 export async function updateEvent(currentState: CurrentState, data: EventSchema) {
   try {
     await prisma.event.update({
@@ -729,6 +776,7 @@ export async function updateEvent(currentState: CurrentState, data: EventSchema)
   }
 }
 
+// ! delete event
 export async function deleteEvent(currentState: CurrentState, data: FormData) {
   const id = data.get('id') as string;
   try {
@@ -741,6 +789,8 @@ export async function deleteEvent(currentState: CurrentState, data: FormData) {
     return { success: false, error: true };
   }
 }
+
+// ! create announcement
 export async function createAnnouncement(currentState: CurrentState, data: AnnouncementSchema) {
   try {
     await prisma.announcement.create({
@@ -752,6 +802,7 @@ export async function createAnnouncement(currentState: CurrentState, data: Annou
   }
 }
 
+// ! update announcement
 export async function updateAnnouncement(currentState: CurrentState, data: AnnouncementSchema) {
   try {
     await prisma.announcement.update({
@@ -764,6 +815,7 @@ export async function updateAnnouncement(currentState: CurrentState, data: Annou
   }
 }
 
+// ! delete announcement
 export async function deleteAnnouncement(currentState: CurrentState, data: FormData) {
   const id = data.get('id') as string;
   try {

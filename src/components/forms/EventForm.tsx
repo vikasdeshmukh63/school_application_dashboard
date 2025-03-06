@@ -29,17 +29,21 @@ const EventForm = ({
     resolver: zodResolver(eventSchema),
   });
 
+  // form state
   const [state, formAction] = useFormState(type === 'create' ? createEvent : updateEvent, {
     success: false,
     error: false,
   });
 
+  // on submit
   const onSubmit = handleSubmit(data => {
     formAction(data);
   });
 
+  // router
   const router = useRouter();
 
+  // after form submission
   useEffect(() => {
     if (state.success) {
       toast.success(`Event has been ${type === 'create' ? 'created' : 'updated'}!`);
@@ -48,9 +52,10 @@ const EventForm = ({
     }
   }, [state, router, type, setOpen]);
 
+  // classes
   const { classes } = relatedData;
 
-  // Format date for datetime-local input
+  // format date for datetime-local input
   const formatDateForInput = (date: Date) => {
     if (!date) return '';
     const d = new Date(date);
@@ -64,11 +69,13 @@ const EventForm = ({
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
+      {/* title */}
       <h1 className="text-xl font-semibold">
         {type === 'create' ? 'Create a new event' : 'Update the event'}
       </h1>
 
       <div className="flex justify-between flex-wrap gap-4">
+        {/* title */}
         <InputField
           label="Title"
           name="title"
@@ -76,6 +83,7 @@ const EventForm = ({
           register={register}
           error={errors?.title}
         />
+        {/* description */}
         <InputField
           label="Description"
           name="description"
@@ -83,6 +91,7 @@ const EventForm = ({
           register={register}
           error={errors?.description}
         />
+        {/* start time */}
         <InputField
           label="Start Time"
           name="startTime"
@@ -91,6 +100,7 @@ const EventForm = ({
           error={errors?.startTime}
           type="datetime-local"
         />
+        {/* end time */}
         <InputField
           label="End Time"
           name="endTime"
@@ -99,6 +109,7 @@ const EventForm = ({
           error={errors?.endTime}
           type="datetime-local"
         />
+        {/* id */}
         {data && (
           <InputField
             label="Id"
@@ -109,6 +120,7 @@ const EventForm = ({
             hidden
           />
         )}
+        {/* class */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Class (Optional)</label>
           <select
@@ -128,7 +140,9 @@ const EventForm = ({
           )}
         </div>
       </div>
+      {/* error */}
       {state.error && <span className="text-red-500">Something went wrong!</span>}
+      {/* button */}
       <button type="submit" className="bg-blue-400 text-white p-2 rounded-md">
         {type === 'create' ? 'Create' : 'Update'}
       </button>

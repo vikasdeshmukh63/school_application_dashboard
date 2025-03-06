@@ -3,15 +3,20 @@ import { getUserId, getUserRole } from '@/utils/utils';
 import React from 'react';
 
 const Announcements = async () => {
+  // get user role
   const role = await getUserRole();
+
+  // get user id
   const userId = await getUserId();
 
+  // role conditions
   const roleConditions = {
     teacher: { lessons: { some: { teacherId: userId! } } },
     student: { students: { some: { id: userId! } } },
     parent: { students: { some: { parentId: userId! } } },
   };
 
+  // get announcements
   const data = await prisma.announcement.findMany({
     take: 3,
     orderBy: { date: 'desc' },
@@ -27,10 +32,12 @@ const Announcements = async () => {
 
   return (
     <div className="bg-white p-4 rounded-md">
+      {/* title */}
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Announcements</h1>
         <span className="text-xs text-gray-400">View All</span>
       </div>
+      {/* announcements */}
       <div className="flex flex-col gap-4 mt-4">
         {data[0] && (
           <div className="bg-customSkyLight rounded-md p-4">

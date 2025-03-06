@@ -1,16 +1,14 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import InputField from '../InputField';
-import Image from 'next/image';
-import { SubjectSchema, subjectSchema } from '@/lib/formValidationSchemas';
 import { createSubject, updateSubject } from '@/lib/actions';
-import { useFormState } from 'react-dom';
-import { useEffect, Dispatch, SetStateAction } from 'react';
-import { toast } from 'react-toastify';
+import { SubjectSchema, subjectSchema } from '@/lib/formValidationSchemas';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useFormState } from 'react-dom';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import InputField from '../InputField';
 
 const SubjectForm = ({
   type,
@@ -31,24 +29,30 @@ const SubjectForm = ({
     resolver: zodResolver(subjectSchema),
   });
 
+  // form state
   const [state, formAction] = useFormState(type === 'create' ? createSubject : updateSubject, {
     success: false,
     error: false,
   });
+
+  // router
   const router = useRouter();
 
+  // on submit
   const onSubmit = handleSubmit(formData => {
     formAction(formData);
   });
 
+  // after form submission
   useEffect(() => {
     if (state.success) {
       toast.success(`Subject has been ${type === 'create' ? 'created' : 'updated'} successfully`);
       router.refresh();
       setOpen(false);
     }
-  }, [state]);
+  }, [state, router, type, setOpen]);
 
+  // teachers
   const { teachers } = relatedData;
 
   return (
@@ -57,6 +61,7 @@ const SubjectForm = ({
       <h1 className="text-xl font-semibold">
         {type === 'create' ? 'Create a new subject' : 'Update subject'}
       </h1>
+      {/* subject name */}
       <div className="flex justify-between flex-wrap gap-4">
         <InputField
           label="Subject name"
@@ -65,7 +70,7 @@ const SubjectForm = ({
           register={register}
           error={errors?.name}
         />
-
+        {/* id */}
         {data && (
           <InputField
             label="ID"
@@ -76,7 +81,7 @@ const SubjectForm = ({
             hidden={true}
           />
         )}
-
+        {/* teachers */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Teachers</label>
           <select
@@ -96,8 +101,9 @@ const SubjectForm = ({
           )}
         </div>
       </div>
+      {/* error */}
       {state.error && <span className="text-red-400">Something went wrong</span>}
-
+      {/* button */}
       <button className="bg-blue-400 text-white p-2 rounded-md" type="submit">
         {type === 'create' ? 'Create' : 'Update'}
       </button>

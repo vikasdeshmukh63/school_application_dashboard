@@ -1,5 +1,4 @@
 import FormContainer from '@/components/FormContainer';
-import FormModal from '@/components/FormModal';
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
 import TableSearch from '@/components/TableSearch';
@@ -7,9 +6,9 @@ import prisma from '@/lib/prisma';
 import { ITEM_PER_PAGE } from '@/lib/settings';
 import { getUserId, getUserRole } from '@/utils/utils';
 import { Prisma } from '@prisma/client';
-import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
+// result list type
 type ResultList = {
   id: number;
   title: string;
@@ -26,20 +25,28 @@ type ResultList = {
 };
 
 const renderRow = async (item: ResultList) => {
+  // user role
   const role = await getUserRole();
   return (
     <tr
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-customPurpleLight"
     >
+      {/* title */}
       <td className="flex items-center gap-4 p-4">{item.title}</td>
+      {/* student */}
       <td>{item.studentName + ' ' + item.studentName}</td>
+      {/* score */}
       <td className="hidden md:table-cell">{item.score}</td>
+      {/* teacher */}
       <td className="hidden md:table-cell">{item.teacherName + ' ' + item.teacherSurname}</td>
+      {/* class */}
       <td className="hidden md:table-cell">{item.className}</td>
+      {/* date */}
       <td className="hidden md:table-cell">
         {new Intl.DateTimeFormat('en-IN').format(item.startTime)}
       </td>
+      {/* actions */}
       <td>
         <div className="flex items-center gap-2">
           {(role === 'admin' || role === 'teacher') && (
@@ -59,9 +66,12 @@ const ResultListPage = async ({
 }: {
   searchParams: { [key: string]: string } | undefined;
 }) => {
+  // user role
   const role = await getUserRole();
+  // user id
   const userId = await getUserId();
 
+  // columns
   const columns = [
     {
       header: 'Title',
@@ -168,6 +178,7 @@ const ResultListPage = async ({
       break;
   }
 
+  // getting data
   const [dataRes, count] = await prisma.$transaction([
     prisma.result.findMany({
       where: query,

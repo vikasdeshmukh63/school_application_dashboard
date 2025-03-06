@@ -1,33 +1,38 @@
 import FormContainer from '@/components/FormContainer';
-import FormModal from '@/components/FormModal';
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
 import TableSearch from '@/components/TableSearch';
-import { classesData, role } from '@/lib/data';
 import prisma from '@/lib/prisma';
 import { ITEM_PER_PAGE } from '@/lib/settings';
 import { getUserId, getUserRole } from '@/utils/utils';
-import { Class, Grade, Prisma, Teacher } from '@prisma/client';
-import Image from 'next/image';
+import { Class, Prisma, Teacher } from '@prisma/client';
 import { redirect } from 'next/navigation';
 
+// class list type
 type ClassList = Class & {
   supervisor: Teacher;
 };
 
 const renderRow = async (item: ClassList) => {
+  // user role
   const role = await getUserRole();
+
   return (
     <tr
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-customPurpleLight"
     >
+      {/* class name */}
       <td className="flex items-center gap-4 p-4">{item.name}</td>
+      {/* capacity */}
       <td className="hidden md:table-cell">{item.capacity}</td>
+      {/* grade */}
       <td className="hidden md:table-cell">{item.name[0]}</td>
+      {/* supervisor */}
       <td className="hidden md:table-cell">
         {item.supervisor.name + ' ' + item.supervisor.surname}
       </td>
+      {/* actions */}
       <td>
         <div className="flex items-center gap-2">
           {role === 'admin' && (
@@ -47,9 +52,12 @@ const ClassListPage = async ({
 }: {
   searchParams: { [key: string]: string } | undefined;
 }) => {
+  // user role
   const role = await getUserRole();
+  // user id
   const userId = await getUserId();
 
+  // columns
   const columns = [
     {
       header: 'Class Name',

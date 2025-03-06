@@ -29,17 +29,21 @@ const LessonForm = ({
     resolver: zodResolver(lessonSchema),
   });
 
+  // form state
   const [state, formAction] = useFormState(type === 'create' ? createLesson : updateLesson, {
     success: false,
     error: false,
   });
 
+  // on submit
   const onSubmit = handleSubmit(data => {
     formAction(data);
   });
 
+  // router
   const router = useRouter();
 
+  // after form submission
   useEffect(() => {
     if (state.success) {
       toast.success(`Lesson has been ${type === 'create' ? 'created' : 'updated'}!`);
@@ -48,9 +52,10 @@ const LessonForm = ({
     }
   }, [state, router, type, setOpen]);
 
+  // subjects, classes, teachers
   const { subjects, classes, teachers } = relatedData;
 
-  // Format date for datetime-local input
+  // format date for datetime-local input
   const formatDateForInput = (date: Date) => {
     if (!date) return '';
     const d = new Date(date);
@@ -64,11 +69,13 @@ const LessonForm = ({
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
+      {/* title */}
       <h1 className="text-xl font-semibold">
         {type === 'create' ? 'Create a new lesson' : 'Update the lesson'}
       </h1>
 
       <div className="flex justify-between flex-wrap gap-4">
+        {/* lesson name */}
         <InputField
           label="Lesson name"
           name="name"
@@ -76,6 +83,7 @@ const LessonForm = ({
           register={register}
           error={errors?.name}
         />
+        {/* day */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Day</label>
           <select
@@ -93,6 +101,7 @@ const LessonForm = ({
             <p className="text-xs text-red-400">{errors.day.message.toString()}</p>
           )}
         </div>
+        {/* start time */}
         <InputField
           label="Start Time"
           name="startTime"
@@ -101,6 +110,7 @@ const LessonForm = ({
           error={errors?.startTime}
           type="datetime-local"
         />
+        {/* end time */}
         <InputField
           label="End Time"
           name="endTime"
@@ -109,6 +119,7 @@ const LessonForm = ({
           error={errors?.endTime}
           type="datetime-local"
         />
+        {/* id */}
         {data && (
           <InputField
             label="Id"
@@ -119,6 +130,7 @@ const LessonForm = ({
             hidden
           />
         )}
+        {/* subject */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Subject</label>
           <select
@@ -136,6 +148,7 @@ const LessonForm = ({
             <p className="text-xs text-red-400">{errors.subjectId.message.toString()}</p>
           )}
         </div>
+        {/* class */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Class</label>
           <select
@@ -153,6 +166,7 @@ const LessonForm = ({
             <p className="text-xs text-red-400">{errors.classId.message.toString()}</p>
           )}
         </div>
+        {/* teacher */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Teacher</label>
           <select
@@ -171,7 +185,9 @@ const LessonForm = ({
           )}
         </div>
       </div>
+      {/* error */}
       {state.error && <span className="text-red-500">Something went wrong!</span>}
+      {/* button */}
       <button type="submit" className="bg-blue-400 text-white p-2 rounded-md">
         {type === 'create' ? 'Create' : 'Update'}
       </button>

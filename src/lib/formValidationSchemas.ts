@@ -1,5 +1,5 @@
 import { z } from 'zod';
-
+// ! subject
 export const subjectSchema = z.object({
   id: z.coerce.number().optional(),
   name: z.string().min(1, { message: 'Subject name is required!' }),
@@ -8,6 +8,7 @@ export const subjectSchema = z.object({
 
 export type SubjectSchema = z.infer<typeof subjectSchema>;
 
+// ! class
 export const classSchema = z.object({
   id: z.coerce.number().optional(),
   name: z.string().min(1, { message: 'Subject name is required!' }),
@@ -18,6 +19,7 @@ export const classSchema = z.object({
 
 export type ClassSchema = z.infer<typeof classSchema>;
 
+// ! teacher
 export const teacherSchema = z.object({
   id: z.string().optional(),
   username: z
@@ -43,6 +45,7 @@ export const teacherSchema = z.object({
 
 export type TeacherSchema = z.infer<typeof teacherSchema>;
 
+// ! student
 export const studentSchema = z.object({
   id: z.string().optional(),
   username: z
@@ -70,6 +73,7 @@ export const studentSchema = z.object({
 
 export type StudentSchema = z.infer<typeof studentSchema>;
 
+// ! exam
 export const examSchema = z.object({
   id: z.coerce.number().optional(),
   title: z.string().min(1, { message: 'Title name is required!' }),
@@ -80,6 +84,7 @@ export const examSchema = z.object({
 
 export type ExamSchema = z.infer<typeof examSchema>;
 
+// ! parent
 export const parentSchema = z.object({
   id: z.string().optional(),
   username: z
@@ -101,6 +106,7 @@ export const parentSchema = z.object({
 
 export type ParentSchema = z.infer<typeof parentSchema>;
 
+// ! lesson
 export const lessonSchema = z.object({
   id: z.coerce.number().optional(),
   name: z.string().min(1, { message: 'Lesson name is required!' }),
@@ -116,6 +122,7 @@ export const lessonSchema = z.object({
 
 export type LessonSchema = z.infer<typeof lessonSchema>;
 
+// ! assignment
 export const assignmentSchema = z.object({
   id: z.coerce.number().optional(),
   title: z.string().min(1, { message: 'Title is required!' }),
@@ -126,6 +133,7 @@ export const assignmentSchema = z.object({
 
 export type AssignmentSchema = z.infer<typeof assignmentSchema>;
 
+// ! result
 export const resultSchema = z.object({
   id: z.coerce.number().optional(),
   score: z.coerce
@@ -139,6 +147,7 @@ export const resultSchema = z.object({
 
 export type ResultSchema = z.infer<typeof resultSchema>;
 
+// ! event
 export const eventSchema = z.object({
   id: z.coerce.number().optional(),
   title: z.string().min(1, { message: 'Title is required!' }),
@@ -150,6 +159,7 @@ export const eventSchema = z.object({
 
 export type EventSchema = z.infer<typeof eventSchema>;
 
+// ! announcement
 export const announcementSchema = z.object({
   id: z.coerce.number().optional(),
   title: z.string().min(1, { message: 'Title is required!' }),

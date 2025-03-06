@@ -1,21 +1,22 @@
 import Announcements from '@/components/Announcements';
 import BigCalendarContainer from '@/components/BigCalendarContainer';
-import BigCalender from '@/components/BigCalender';
 import FormContainer from '@/components/FormContainer';
 import Performance from '@/components/Performance';
 import StudentAttendanceCard from '@/components/StudentAttendanceCard';
 import prisma from '@/lib/prisma';
 import { getUserRole } from '@/utils/utils';
 import { Class, Student } from '@prisma/client';
-import { CalendarDays, HeartPulse, Mail, MailCheck, Phone } from 'lucide-react';
+import { CalendarDays, HeartPulse, MailCheck, Phone } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 
 const StudentDetails = async ({ params }: { params: { id: string } }) => {
+  // user role
   const role = await getUserRole();
 
+  // student
   const student: (Student & { class: Class & { _count: { lessons: number } } }) | null =
     await prisma.student.findUnique({
       where: {
@@ -30,9 +31,12 @@ const StudentDetails = async ({ params }: { params: { id: string } }) => {
       },
     });
 
+  // if not found
   if (!student) {
     return notFound();
   }
+
+  // rendering
   return (
     <div className="flex-1 p-4 flex flex-col xl:flex-row gap-4">
       {/* left */}
@@ -41,6 +45,7 @@ const StudentDetails = async ({ params }: { params: { id: string } }) => {
         <div className="flex flex-col lg:flex-row gap-4">
           {/* user info card  */}
           <div className="bg-customSky py-6 px-4 rounded-md flex-1 flex gap-4">
+            {/* user photo */}
             <div className="w-1/3">
               <Image
                 src={student.img || '/noAvatar.png'}
@@ -50,27 +55,35 @@ const StudentDetails = async ({ params }: { params: { id: string } }) => {
                 className="rounded-full w-36 h-36 object-cover"
               />
             </div>
+            {/* user info */}
             <div className="w-2/3 flex flex-col justify-between gap-4">
+              {/* name */}
               <div className="flex items-center gap-2">
                 <h1 className="text-xl font-semibold">{`${student.name} ${student.surname}`}</h1>
                 {role === 'admin' && <FormContainer table="student" type="update" data={student} />}
               </div>
+              {/* description */}
               <p className="text-sm text-gray-500">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, eom architecto vel.
               </p>
+              {/* info */}
               <div className="flex items-center justify-between gap-2 flex-wrap text-xs font-medium">
+                {/* blood type */}
                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                   <HeartPulse className="h-4 w-4" />
                   <span>{student.bloodType}</span>
                 </div>
+                {/* birthday */}
                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                   <CalendarDays className="h-4 w-4" />
                   <span>{new Intl.DateTimeFormat('en-IN').format(student.birthday)}</span>
                 </div>
+                {/* email */}
                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                   <MailCheck className="h-4 w-4" />
                   <span>{student.email || '-'}</span>
                 </div>
+                {/* phone */}
                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                   <Phone className="h-4 w-4" />
                   <span>{student.phone || '-'}</span>
@@ -102,6 +115,7 @@ const StudentDetails = async ({ params }: { params: { id: string } }) => {
                 height={24}
                 className="w-6 h-6"
               />
+              {/* grade */}
               <div>
                 <h1 className="text-xl font-semibold">{student.class.name.charAt(0)}th</h1>
                 <span className="text-sm text-gray-400">Grade</span>
@@ -116,6 +130,7 @@ const StudentDetails = async ({ params }: { params: { id: string } }) => {
                 height={24}
                 className="w-6 h-6"
               />
+              {/* lessons */}
               <div>
                 <h1 className="text-xl font-semibold">{student.class._count.lessons}</h1>
                 <span className="text-sm text-gray-400">Lessons</span>
@@ -130,6 +145,7 @@ const StudentDetails = async ({ params }: { params: { id: string } }) => {
                 height={24}
                 className="w-6 h-6"
               />
+              {/* class */}
               <div>
                 <h1 className="text-xl font-semibold">{student.class.name}</h1>
                 <span className="text-sm text-gray-400">Classes</span>
@@ -146,20 +162,27 @@ const StudentDetails = async ({ params }: { params: { id: string } }) => {
       {/* right */}
       <div className="w-full xl:w-1/3 flex flex-col gap-4">
         <div className="bg-white p-4 rounded-md">
+          {/* title */}
           <h1 className="text-xl font-semibold">Shortcuts</h1>
+          {/* shortcuts */}
           <div className="mt-4 flex gap-4 flex-wrap text-xs text-gray-500">
+            {/* lessons */}
             <Link className="p-3 rounded-md bg-customSkyLight" href="/list/lessons?classId==2">
               Student&apos;s Lessons
             </Link>
+            {/* teachers */}
             <Link className="p-3 rounded-md bg-customPurpleLight" href="/list/teachers?classId=2">
               Student&apos;s Teachers
             </Link>
+            {/* exams */}
             <Link className="p-3 rounded-md bg-pink-50" href="/list/exams?classId=2/">
               Student&apos;s Exams
             </Link>
+            {/* assignments */}
             <Link className="p-3 rounded-md bg-customSkyLight" href="/list/assignments?classId=2">
               Student&apos;s Assignments
             </Link>
+            {/* results */}
             <Link
               className="p-3 rounded-md bg-customYellowLight"
               href="/list/results?studentId=student1"
@@ -168,7 +191,9 @@ const StudentDetails = async ({ params }: { params: { id: string } }) => {
             </Link>
           </div>
         </div>
+        {/* performance */}
         <Performance />
+        {/* announcements */}
         <Announcements />
       </div>
     </div>

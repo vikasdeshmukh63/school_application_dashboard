@@ -1,9 +1,7 @@
 import FormContainer from '@/components/FormContainer';
-import FormModal from '@/components/FormModal';
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
 import TableSearch from '@/components/TableSearch';
-import { role, teachersData } from '@/lib/data';
 import prisma from '@/lib/prisma';
 import { ITEM_PER_PAGE } from '@/lib/settings';
 import { getUserRole } from '@/utils/utils';
@@ -13,16 +11,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+// teacher list type
 type TeacherList = Teacher & { subjects: Subject[]; classes: Class[] };
 
 const renderRow = async (item: TeacherList) => {
+  // user role
   const role = await getUserRole();
   return (
     <tr
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-customPurpleLight"
     >
+      {/* info */}
       <td className="flex items-center gap-4 p-4">
+        {/* image */}
         <Image
           src={item.img || '/noAvatar.png'}
           alt=""
@@ -31,26 +33,36 @@ const renderRow = async (item: TeacherList) => {
           className="md:hidden xl:block w-10 h-10 rounded-full object-cover"
         />
         <div className="flex flex-col">
+          {/* name */}
           <h3 className="font-semibold">{item.name}</h3>
+          {/* email */}
           <p className="text-xs text-gray-500">{item?.email}</p>
         </div>
       </td>
+      {/* teacher id */}
       <td className="hidden md:table-cell">{item.username}</td>
+      {/* subjects */}
       <td className="hidden md:table-cell">
         {item.subjects.map(subject => subject.name).join(',')}
       </td>
+      {/* classes */}
       <td className="hidden md:table-cell">
         {item.classes.map(classItem => classItem.name).join(',')}
       </td>
+      {/* phone */}
       <td className="hidden md:table-cell">{item.phone}</td>
+      {/* address */}
       <td className="hidden md:table-cell">{item.address}</td>
+      {/* actions */}
       <td>
         <div className="flex items-center gap-2">
+          {/* view */}
           <Link href={`/list/teachers/${item.id}`}>
             <button className="w-7 h-7 flex items-center justify-center rounded-full bg-customSky">
               <Eye className="h-4 w-4" />
             </button>
           </Link>
+          {/* delete */}
           {role === 'admin' && <FormContainer table="teacher" type="delete" id={item.id} />}
         </div>
       </td>
@@ -63,6 +75,7 @@ const TeacherListPage = async ({
 }: {
   searchParams: { [key: string]: string } | undefined;
 }) => {
+  // user role
   const role = await getUserRole();
 
   const columns = [

@@ -5,8 +5,10 @@ import { getUserId } from '@/utils/utils';
 import { auth } from '@clerk/nextjs/server';
 
 const ParentPage = async () => {
+  // user id
   const userId = await getUserId();
 
+  // students
   const students = await prisma.student.findMany({
     where: {
       parentId: userId!,
@@ -20,9 +22,11 @@ const ParentPage = async () => {
         {students.map(student => (
           <div className="w-full xl:w-2/3" key={student.id}>
             <div className="h-full bg-white p-4 rounded-md">
+              {/* title */}
               <h1 className="text-xl font-semibold">
                 Schedule ({student.name + ' ' + student.surname})
               </h1>
+              {/* calendar */}
               <BigCalendarContainer type="classId" id={student.classId} />
             </div>
           </div>

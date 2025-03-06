@@ -1,16 +1,14 @@
-import FormModal from '@/components/FormModal';
+import FormContainer from '@/components/FormContainer';
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
 import TableSearch from '@/components/TableSearch';
-import { lessonsData, role } from '@/lib/data';
-import { ITEM_PER_PAGE } from '@/lib/settings';
 import prisma from '@/lib/prisma';
-import Image from 'next/image';
-import { redirect } from 'next/navigation';
-import { Lesson, Prisma, Subject, Class, Teacher } from '@prisma/client';
+import { ITEM_PER_PAGE } from '@/lib/settings';
 import { getUserRole } from '@/utils/utils';
-import FormContainer from '@/components/FormContainer';
+import { Class, Lesson, Prisma, Subject, Teacher } from '@prisma/client';
+import { redirect } from 'next/navigation';
 
+// lesson list type
 type LessonList = Lesson & {
   subject: Subject;
   class: Class;
@@ -18,15 +16,20 @@ type LessonList = Lesson & {
 };
 
 const renderRow = async (item: LessonList) => {
+  // user role
   const role = await getUserRole();
   return (
     <tr
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-customPurpleLight"
     >
+      {/* subject name */}
       <td className="flex items-center gap-4 p-4">{item.subject.name}</td>
+      {/* class */}
       <td>{item.class.name}</td>
+      {/* teacher */}
       <td className="hidden md:table-cell">{item.teacher.name + ' ' + item.teacher.surname}</td>
+      {/* actions */}
       <td>
         <div className="flex items-center gap-2">
           {role === 'admin' && (
@@ -46,8 +49,10 @@ const LessonListPage = async ({
 }: {
   searchParams: { [key: string]: string } | undefined;
 }) => {
+  // user role
   const role = await getUserRole();
 
+  // columns
   const columns = [
     {
       header: 'Subject Name',
@@ -145,7 +150,7 @@ const LessonListPage = async ({
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-             {/* <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
+            {/* <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               <SlidersHorizontal className="h-6 w-6" />
             </button>
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">

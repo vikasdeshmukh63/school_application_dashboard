@@ -5,9 +5,11 @@
 When setting up the school management system from scratch, follow this specific order to ensure proper data relationships and avoid foreign key constraint violations.
 
 ### 1. Grade System Setup
+
 - Basic entity with no dependencies
 - Contains level information
 - Required for class creation
+
 ```json
 {
   "id": "autoincrement",
@@ -16,9 +18,11 @@ When setting up the school management system from scratch, follow this specific 
 ```
 
 ### 2. Subject Setup
+
 - Independent entity
 - No initial dependencies
 - Will be linked to teachers and lessons
+
 ```json
 {
   "id": "number",
@@ -28,7 +32,9 @@ When setting up the school management system from scratch, follow this specific 
 ```
 
 ### 3. Class Setup
+
 - Requires Grade to be set up first
+
 ```json
 {
   "id": "number",
@@ -40,8 +46,10 @@ When setting up the school management system from scratch, follow this specific 
 ```
 
 ### 4. Teacher Registration
+
 - Independent entity for basic information
 - Can be linked to subjects later
+
 ```json
 {
   "id": "string",
@@ -61,7 +69,9 @@ When setting up the school management system from scratch, follow this specific 
 ```
 
 ### 5. Parent Registration
+
 - Required before adding students
+
 ```json
 {
   "id": "string",
@@ -77,7 +87,9 @@ When setting up the school management system from scratch, follow this specific 
 ```
 
 ### 6. Student Registration
+
 - Requires Parent, Class, and Grade to be set up first
+
 ```json
 {
   "id": "string",
@@ -99,7 +111,9 @@ When setting up the school management system from scratch, follow this specific 
 ```
 
 ### 7. Lesson Setup
+
 - Requires Subject, Class, and Teacher to be set up first
+
 ```json
 {
   "id": "number",
@@ -114,9 +128,11 @@ When setting up the school management system from scratch, follow this specific 
 ```
 
 ### 8. Additional Entities
+
 These can be added any time after their dependencies are met:
 
 #### Exams
+
 ```json
 {
   "id": "number",
@@ -128,6 +144,7 @@ These can be added any time after their dependencies are met:
 ```
 
 #### Assignments
+
 ```json
 {
   "id": "number",
@@ -139,6 +156,7 @@ These can be added any time after their dependencies are met:
 ```
 
 #### Results
+
 ```json
 {
   "id": "number",
@@ -150,6 +168,7 @@ These can be added any time after their dependencies are met:
 ```
 
 #### Events
+
 ```json
 {
   "id": "number",
@@ -162,6 +181,7 @@ These can be added any time after their dependencies are met:
 ```
 
 #### Announcements
+
 ```json
 {
   "id": "number",

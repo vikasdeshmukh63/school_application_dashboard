@@ -1,6 +1,4 @@
 import { currentUser } from '@clerk/nextjs/server';
-import Image from 'next/image';
-import Link from 'next/link';
 import {
   BookOpenCheck,
   CalendarDays,
@@ -18,6 +16,7 @@ import {
   UserRoundPen,
   Users,
 } from 'lucide-react';
+import Link from 'next/link';
 
 const menuItems = [
   {
@@ -135,6 +134,7 @@ const menuItems = [
 ];
 
 const Menu = async () => {
+  // role and user id
   const user = await currentUser();
   const role = user?.publicMetadata.role as string;
 
@@ -142,7 +142,9 @@ const Menu = async () => {
     <div className="mt-4 text-sm">
       {menuItems.map(i => (
         <div key={i.title} className="flex flex-col gap-2">
+          {/* title */}
           <span className="hidden lg:block text-gray-400 font-light my-4">{i.title}</span>
+          {/* items */}
           {i.items.map(item => {
             if (item.visible.includes(role)) {
               return (
