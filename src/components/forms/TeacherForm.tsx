@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import InputField from '../InputField';
 import Image from 'next/image';
 import { CldUploadWidget } from 'next-cloudinary';
+import { Upload } from 'lucide-react';
 
 const TeacherForm = ({
   type,
@@ -187,7 +188,7 @@ const TeacherForm = ({
                 className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer"
                 onClick={() => open()}
               >
-                <Image src="/upload.png" alt="" width={28} height={28} />
+                <Upload className="h-6 w-6" />
                 <span>Upload a photo</span>
               </div>
             );

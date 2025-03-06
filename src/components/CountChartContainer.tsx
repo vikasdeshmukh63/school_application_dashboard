@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import CountChart from './CountChart';
 import prisma from '@/lib/prisma';
+import { Ellipsis } from 'lucide-react';
 
 const CountChartContainer = async () => {
   const data = await prisma.student.groupBy({
@@ -16,7 +17,7 @@ const CountChartContainer = async () => {
       {/* TITLE */}
       <div className="flex justify-between items-center">
         <h1 className="text-lg font-semibold">Students</h1>
-        <Image src="/moreDark.png" alt="" width={20} height={20} />
+        <Ellipsis className="h-6 w-6" />
       </div>
       {/* CHART */}
       <CountChart boys={boys} girls={girls} />

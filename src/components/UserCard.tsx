@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { Ellipsis } from 'lucide-react';
 import Image from 'next/image';
 
 const UserCard = async ({ type }: { type: 'admin' | 'teacher' | 'student' | 'parent' }) => {
@@ -17,7 +18,7 @@ const UserCard = async ({ type }: { type: 'admin' | 'teacher' | 'student' | 'par
         <span className="text-[10px] bg-white px-2 py-1 rounded-full text-green-600">
           {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long' })}
         </span>
-        <Image src="/more.png" alt="more.png" width={20} height={20} />
+        <Ellipsis className="h-6 w-6" />
       </div>
       <h1 className="text-2xl font-semibold my-4">{data}</h1>
       <h2 className="capitalize text-sm font-medium text-gray-500">{type}s</h2>

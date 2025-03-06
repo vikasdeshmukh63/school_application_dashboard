@@ -1,5 +1,6 @@
 'use client';
 
+import { Ellipsis } from 'lucide-react';
 import Image from 'next/image';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 
@@ -13,7 +14,7 @@ const Performance = () => {
     <div className="bg-white p-4 rounded-md h-80 relative">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Performance</h1>
-        <Image src="/moreDark.png" alt="moreDark" width={16} height={16} />
+        <Ellipsis className="h-6 w-6" />
       </div>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart width={400} height={400}>

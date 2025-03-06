@@ -1,67 +1,84 @@
 import { currentUser } from '@clerk/nextjs/server';
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  BookOpenCheck,
+  CalendarDays,
+  ClipboardPenLine,
+  ContactRound,
+  Drum,
+  FileUser,
+  HomeIcon,
+  IdCard,
+  LogOut,
+  Notebook,
+  ScrollText,
+  Settings,
+  TextSelect,
+  UserRoundPen,
+  Users,
+} from 'lucide-react';
 
 const menuItems = [
   {
     title: 'MENU',
     items: [
       {
-        icon: '/home.png',
+        icon: <HomeIcon className="h-6 w-6" />,
         label: 'Home',
         href: '/',
         visible: ['admin', 'teacher', 'student', 'parent'],
       },
       {
-        icon: '/teacher.png',
+        icon: <ContactRound className="h-6 w-6" />,
         label: 'Teachers',
         href: '/list/teachers',
         visible: ['admin', 'teacher'],
       },
       {
-        icon: '/student.png',
+        icon: <FileUser className="h-6 w-6" />,
         label: 'Students',
         href: '/list/students',
         visible: ['admin', 'teacher'],
       },
       {
-        icon: '/parent.png',
+        icon: <Users className="h-6 w-6" />,
         label: 'Parents',
         href: '/list/parents',
         visible: ['admin', 'teacher'],
       },
       {
-        icon: '/subject.png',
+        icon: <Notebook className="h-6 w-6" />,
         label: 'Subjects',
         href: '/list/subjects',
         visible: ['admin'],
       },
       {
-        icon: '/class.png',
+        icon: <IdCard className="h-6 w-6" />,
         label: 'Classes',
         href: '/list/classes',
         visible: ['admin', 'teacher'],
       },
       {
-        icon: '/lesson.png',
+        icon: <BookOpenCheck className="h-6 w-6" />,
         label: 'Lessons',
         href: '/list/lessons',
         visible: ['admin', 'teacher'],
       },
       {
-        icon: '/exam.png',
+        icon: <ScrollText className="h-6 w-6" />,
         label: 'Exams',
         href: '/list/exams',
         visible: ['admin', 'teacher', 'student', 'parent'],
       },
       {
-        icon: '/assignment.png',
+        icon: <ClipboardPenLine className="h-6 w-6" />,
         label: 'Assignments',
         href: '/list/assignments',
         visible: ['admin', 'teacher', 'student', 'parent'],
       },
       {
-        icon: '/result.png',
+        icon: <TextSelect className="h-6 w-6" />,
         label: 'Results',
         href: '/list/results',
         visible: ['admin', 'teacher', 'student', 'parent'],
@@ -73,7 +90,7 @@ const menuItems = [
       //   visible: ['admin', 'teacher', 'student', 'parent'],
       // },
       {
-        icon: '/calendar.png',
+        icon: <CalendarDays className="h-6 w-6" />,
         label: 'Events',
         href: '/list/events',
         visible: ['admin', 'teacher', 'student', 'parent'],
@@ -85,7 +102,7 @@ const menuItems = [
       //   visible: ['admin', 'teacher', 'student', 'parent'],
       // },
       {
-        icon: '/announcement.png',
+        icon: <Drum className="h-6 w-6" />,
         label: 'Announcements',
         href: '/list/announcements',
         visible: ['admin', 'teacher', 'student', 'parent'],
@@ -96,19 +113,19 @@ const menuItems = [
     title: 'OTHER',
     items: [
       {
-        icon: '/profile.png',
+        icon: <UserRoundPen className="h-6 w-6" />,
         label: 'Profile',
         href: '/profile',
         visible: ['admin', 'teacher', 'student', 'parent'],
       },
       {
-        icon: '/setting.png',
+        icon: <Settings className="h-6 w-6" />,
         label: 'Settings',
         href: '/settings',
         visible: ['admin', 'teacher', 'student', 'parent'],
       },
       {
-        icon: '/logout.png',
+        icon: <LogOut className="h-6 w-6" />,
         label: 'Logout',
         href: '/logout',
         visible: ['admin', 'teacher', 'student', 'parent'],
@@ -134,7 +151,7 @@ const Menu = async () => {
                   href={item.href}
                   className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-customSkyLight"
                 >
-                  <Image src={item.icon} alt={item.label} width={20} height={20} />
+                  {item.icon}
                   <span className="hidden lg:block">{item.label}</span>
                 </Link>
               );

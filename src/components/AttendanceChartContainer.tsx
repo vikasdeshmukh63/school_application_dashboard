@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import AttendanceChart from './AttendanceChart';
 import prisma from '@/lib/prisma';
+import { Ellipsis } from 'lucide-react';
 
 const AttendanceChartContainer = async () => {
   const today = new Date();
@@ -60,7 +61,7 @@ const AttendanceChartContainer = async () => {
     <div className="bg-white rounded-lg p-4 h-full">
       <div className="flex justify-between items-center">
         <h1 className="text-lg font-semibold">Attendance</h1>
-        <Image src="/moreDark.png" alt="" width={20} height={20} />
+        <Ellipsis className="h-6 w-6" />
       </div>
       <AttendanceChart data={data} />
     </div>
