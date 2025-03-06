@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { Lesson, Prisma, Subject, Class, Teacher } from '@prisma/client';
 import { getUserRole } from '@/utils/utils';
+import FormContainer from '@/components/FormContainer';
 
 type LessonList = Lesson & {
   subject: Subject;
@@ -30,8 +31,8 @@ const renderRow = async (item: LessonList) => {
         <div className="flex items-center gap-2">
           {role === 'admin' && (
             <>
-              <FormModal table="lesson" type="update" data={item} />
-              <FormModal table="lesson" type="delete" id={item.id} />
+              <FormContainer table="lesson" type="update" data={item} />
+              <FormContainer table="lesson" type="delete" id={item.id} />
             </>
           )}
         </div>
@@ -150,7 +151,7 @@ const LessonListPage = async ({
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === 'admin' && <FormModal table="lesson" type="create" />}
+            {role === 'admin' && <FormContainer table="lesson" type="create" />}
           </div>
         </div>
       </div>

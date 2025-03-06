@@ -1,18 +1,16 @@
 'use client';
 
-import { createTeacher, updateTeacher } from '@/lib/actions';
-import { teacherSchema, TeacherSchema } from '@/lib/formValidationSchemas';
+import { createParent, updateParent } from '@/lib/actions';
+import { parentSchema, ParentSchema } from '@/lib/formValidationSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useFormState } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import InputField from '../InputField';
-import Image from 'next/image';
-import { CldUploadWidget } from 'next-cloudinary';
 
-const TeacherForm = ({
+const ParentForm = ({
   type,
   data,
   setOpen,
@@ -27,38 +25,35 @@ const TeacherForm = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TeacherSchema>({
-    resolver: zodResolver(teacherSchema),
+  } = useForm<ParentSchema>({
+    resolver: zodResolver(parentSchema),
   });
 
-  const [img, setImg] = useState<any>();
-
-  const [state, formAction] = useFormState(type === 'create' ? createTeacher : updateTeacher, {
+  const [state, formAction] = useFormState(type === 'create' ? createParent : updateParent, {
     success: false,
     error: false,
   });
 
   const onSubmit = handleSubmit(data => {
-    console.log(data);
-    formAction({ ...data, img: img?.secure_url });
+    formAction(data);
   });
 
   const router = useRouter();
 
   useEffect(() => {
     if (state.success) {
-      toast.success(`Teacher has been ${type === 'create' ? 'created' : 'updated'}!`);
+      toast.success(`Parent has been ${type === 'create' ? 'created' : 'updated'}!`);
       setOpen(false);
       router.refresh();
     }
   }, [state, router, type, setOpen]);
 
-  const { subjects } = relatedData;
+  const { students } = relatedData;
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
-        {type === 'create' ? 'Create a new teacher' : 'Update the teacher'}
+        {type === 'create' ? 'Create a new parent' : 'Update the parent'}
       </h1>
       <span className="text-xs text-gray-400 font-medium">Authentication Information</span>
       <div className="flex justify-between flex-wrap gap-4">
@@ -115,21 +110,6 @@ const TeacherForm = ({
           register={register}
           error={errors.address}
         />
-        <InputField
-          label="Blood Type"
-          name="bloodType"
-          defaultValue={data?.bloodType}
-          register={register}
-          error={errors.bloodType}
-        />
-        <InputField
-          label="Birthday"
-          name="birthday"
-          defaultValue={data?.birthday.toISOString().split('T')[0]}
-          register={register}
-          error={errors.birthday}
-          type="date"
-        />
         {data && (
           <InputField
             label="Id"
@@ -140,66 +120,32 @@ const TeacherForm = ({
             hidden
           />
         )}
+
         <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500"> Gender</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register('gender')}
-            defaultValue={data?.gender}
-          >
-            <option value="MALE">Male</option>
-            <option value="FEMALE">Female</option>
-          </select>
-          {errors.gender?.message && (
-            <p className="text-xs text-red-400">{errors.gender.message.toString()}</p>
-          )}
-        </div>
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Subjects</label>
+          <label className="text-xs text-gray-500">Students</label>
           <select
             multiple
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register('subjects')}
-            defaultValue={data?.subjects}
+            {...register('students')}
+            defaultValue={data?.students}
           >
-            {subjects.map((subject: { id: number; name: string }) => (
-              <option value={subject.id} key={subject.id}>
-                {subject.name}
+            {students.map((student: { id: number; name: string; surname: string }) => (
+              <option value={student.id} key={student.id}>
+                {student.name} {student.surname}
               </option>
             ))}
           </select>
-          {errors.subjects?.message && (
-            <p className="text-xs text-red-400">{errors.subjects.message.toString()}</p>
+          {errors.students?.message && (
+            <p className="text-xs text-red-400">{errors.students.message.toString()}</p>
           )}
         </div>
-        {console.log(img)}
-        {img && <Image src={img.secure_url} alt="" width={100} height={100} />}
-        <CldUploadWidget
-          uploadPreset="school"
-          onSuccess={(result, { widget }) => {
-            setImg(result.info);
-            widget.close();
-          }}
-        >
-          {({ open }) => {
-            return (
-              <div
-                className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer"
-                onClick={() => open()}
-              >
-                <Image src="/upload.png" alt="" width={28} height={28} />
-                <span>Upload a photo</span>
-              </div>
-            );
-          }}
-        </CldUploadWidget>
       </div>
       {state.error && <span className="text-red-500">Something went wrong!</span>}
-      <button className="bg-blue-400 text-white p-2 rounded-md">
+      <button type="submit" className="bg-blue-400 text-white p-2 rounded-md">
         {type === 'create' ? 'Create' : 'Update'}
       </button>
     </form>
   );
 };
 
-export default TeacherForm;
+export default ParentForm;

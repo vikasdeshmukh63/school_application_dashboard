@@ -1,6 +1,17 @@
 'use client';
 
-import { deleteClass, deleteExam, deleteStudent, deleteSubject, deleteTeacher } from '@/lib/actions';
+import {
+  deleteClass,
+  deleteExam,
+  deleteStudent,
+  deleteSubject,
+  deleteTeacher,
+  deleteParent,
+  deleteLesson,
+  deleteAssignment,
+  deleteEvent,
+  deleteAnnouncement,
+} from '@/lib/actions';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -20,14 +31,14 @@ const deleteActionMap: Partial<Record<TableType, ServerAction>> = {
   teacher: deleteTeacher,
   class: deleteClass,
   student: deleteStudent,
-  // parent: deleteSubject, // temporary placeholder
-  // lesson: deleteSubject, // temporary placeholder
+  parent: deleteParent,
+  lesson: deleteLesson,
   exam: deleteExam,
-  // assignment: deleteSubject, // temporary placeholder
+  assignment: deleteAssignment,
   // result: deleteSubject, // temporary placeholder
   // attendance: deleteSubject, // temporary placeholder
-  // event: deleteSubject, // temporary placeholder
-  // announcement: deleteSubject, // temporary placeholder
+  event: deleteEvent,
+  announcement: deleteAnnouncement,
 };
 
 // using lazy loading
@@ -44,6 +55,24 @@ const ClassForm = dynamic(() => import('./forms/ClassForm'), {
   loading: () => <h1>Loading...</h1>,
 });
 const ExamForm = dynamic(() => import('./forms/ExamForm'), {
+  loading: () => <h1>Loading...</h1>,
+});
+const ParentForm = dynamic(() => import('./forms/ParentForm'), {
+  loading: () => <h1>Loading...</h1>,
+});
+const LessonForm = dynamic(() => import('./forms/LessonForm'), {
+  loading: () => <h1>Loading...</h1>,
+});
+const AssignmentForm = dynamic(() => import('./forms/AssignmentForm'), {
+  loading: () => <h1>Loading...</h1>,
+});
+const EventForm = dynamic(() => import('./forms/EventForm'), {
+  loading: () => <h1>Loading...</h1>,
+});
+const AnnouncementForm = dynamic(() => import('./forms/AnnouncementForm'), {
+  loading: () => <h1>Loading...</h1>,
+});
+const ResultForm = dynamic(() => import('./forms/ResultForm'), {
   loading: () => <h1>Loading...</h1>,
 });
 
@@ -69,6 +98,24 @@ const forms: {
   ),
   exam: (type, setOpen, data, relatedData) => (
     <ExamForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
+  ),
+  parent: (type, setOpen, data, relatedData) => (
+    <ParentForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
+  ),
+  lesson: (type, setOpen, data, relatedData) => (
+    <LessonForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
+  ),
+  assignment: (type, setOpen, data, relatedData) => (
+    <AssignmentForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
+  ),
+  result: (type, setOpen, data, relatedData) => (
+    <ResultForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
+  ),
+  event: (type, setOpen, data, relatedData) => (
+    <EventForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
+  ),
+  announcement: (type, setOpen, data, relatedData) => (
+    <AnnouncementForm type={type} data={data} setOpen={setOpen} relatedData={relatedData} />
   ),
 };
 
@@ -102,7 +149,7 @@ const FormModal = ({
         router.refresh();
         setOpen(false);
       }
-    }, [state]);
+    }, [router, state]);
 
     return type === 'delete' && id ? (
       <form action={formAction} className="p-4 flex flex-col gap-4">

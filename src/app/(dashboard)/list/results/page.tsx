@@ -1,3 +1,4 @@
+import FormContainer from '@/components/FormContainer';
 import FormModal from '@/components/FormModal';
 import Pagination from '@/components/Pagination';
 import Table from '@/components/Table';
@@ -41,8 +42,8 @@ const renderRow = async (item: ResultList) => {
           {role === 'admin' ||
             (role === 'teacher' && (
               <>
-                <FormModal table="result" type="update" data={item} />
-                <FormModal table="result" type="delete" id={item.id} />
+                <FormContainer table="result" type="update" data={item} />
+                <FormContainer table="result" type="delete" id={item.id} />
               </>
             ))}
         </div>
@@ -231,7 +232,7 @@ const ResultListPage = async ({
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === 'admin' || (role === 'teacher' && <FormModal table="result" type="create" />)}
+            {role === 'admin' || (role === 'teacher' && <FormContainer table="result" type="create" />)}
           </div>
         </div>
       </div>
