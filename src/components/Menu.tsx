@@ -111,18 +111,18 @@ const menuItems = [
   {
     title: 'OTHER',
     items: [
-      {
-        icon: <UserRoundPen className="h-6 w-6" />,
-        label: 'Profile',
-        href: '/profile',
-        visible: ['admin', 'teacher', 'student', 'parent'],
-      },
-      {
-        icon: <Settings className="h-6 w-6" />,
-        label: 'Settings',
-        href: '/settings',
-        visible: ['admin', 'teacher', 'student', 'parent'],
-      },
+      // {
+      //   icon: <UserRoundPen className="h-6 w-6" />,
+      //   label: 'Profile',
+      //   href: '/profile',
+      //   visible: ['admin', 'teacher', 'student', 'parent'],
+      // },
+      // {
+      //   icon: <Settings className="h-6 w-6" />,
+      //   label: 'Settings',
+      //   href: '/settings',
+      //   visible: ['admin', 'teacher', 'student', 'parent'],
+      // },
       {
         icon: <LogOut className="h-6 w-6" />,
         label: 'Logout',
