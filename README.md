@@ -83,6 +83,68 @@ docker build -t school-dashboard .
 docker-compose up -d
 ```
 
+## Deployment
+
+### Vercel Deployment
+
+1. Push your code to a Git repository (GitHub, GitLab, or Bitbucket)
+
+2. Connect your repository to Vercel
+
+3. Configure the following environment variables in your Vercel project settings:
+```env
+DATABASE_URL="your_database_url"
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+```
+
+4. The project includes a `vercel.json` configuration file that handles:
+   - Prisma Client generation
+   - Database migrations
+   - Build process
+
+5. Build settings in Vercel should be:
+   - Build Command: `npm run vercel-build`
+   - Install Command: `npm install`
+   - Output Directory: `.next`
+
+6. Important notes:
+   - The `vercel-build` script ensures Prisma Client is generated during build
+   - Database migrations are automatically applied during build
+   - The browserslist database is updated during installation
+
+### Common Deployment Issues
+
+1. **Prisma Client Generation**
+   - The project now includes a dedicated `vercel-build` script
+   - Prisma Client is generated both during build and postinstall
+   - If issues persist, try:
+     ```bash
+     # Locally
+     npx prisma generate
+     # Commit the generated files
+     git add node_modules/.prisma
+     git commit -m "chore: update prisma client"
+     ```
+
+2. **Browserslist Database**
+   - The `postinstall` script automatically updates the browserslist database
+   - You can manually update it by running: `npx update-browserslist-db@latest`
+
+3. **Database Migrations**
+   - Migrations are now automatically applied during the build process
+   - If you need to run migrations manually:
+     ```bash
+     npx prisma migrate deploy
+     ```
+
+4. **Build Cache Issues**
+   - If you encounter build cache issues:
+     1. Go to your Vercel project settings
+     2. Navigate to the "Build & Development Settings" section
+     3. Click "Clear Build Cache"
+     4. Redeploy your application
+
 ## Project Structure
 
 ```
