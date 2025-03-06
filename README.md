@@ -1,218 +1,164 @@
-# School Management Dashboard
+# School Application Dashboard
 
-## Database Setup Order
+A modern school management system built with Next.js, Prisma, and PostgreSQL.
 
-When setting up the school management system from scratch, follow this specific order to ensure proper data relationships and avoid foreign key constraint violations.
+## Tech Stack
 
-### 1. Grade System Setup
+- **Frontend**: Next.js 14, React 18, TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: Clerk
+- **UI Components**: Lucide React
+- **Form Handling**: React Hook Form with Zod validation
+- **Calendar**: React Big Calendar
+- **Charts**: Recharts
+- **Notifications**: React Toastify
 
-- Basic entity with no dependencies
-- Contains level information
-- Required for class creation
+## Prerequisites
 
-```json
-{
-  "id": "autoincrement",
-  "level": "unique integer"
-}
+- Node.js 18+ 
+- PostgreSQL
+- Docker (optional, for containerized deployment)
+
+## Getting Started
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd school_management_dashboard
 ```
 
-### 2. Subject Setup
-
-- Independent entity
-- No initial dependencies
-- Will be linked to teachers and lessons
-
-```json
-{
-  "id": "number",
-  "name": "string",
-  "teachers": "string[]"
-}
+2. Install dependencies:
+```bash
+npm install
 ```
 
-### 3. Class Setup
-
-- Requires Grade to be set up first
-
-```json
-{
-  "id": "number",
-  "name": "string",
-  "capacity": "number",
-  "gradeId": "number",
-  "supervisorId": "string (optional)"
-}
+3. Set up environment variables:
+Create a `.env` file in the root directory with the following variables:
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/school_db"
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
 ```
 
-### 4. Teacher Registration
+4. Set up the database:
+```bash
+# Generate Prisma Client
+npx prisma generate
 
-- Independent entity for basic information
-- Can be linked to subjects later
+# Run database migrations
+npx prisma migrate dev
 
-```json
-{
-  "id": "string",
-  "username": "string",
-  "password": "string",
-  "name": "string",
-  "surname": "string",
-  "email": "string (optional)",
-  "phone": "string (optional)",
-  "address": "string",
-  "img": "string (optional)",
-  "bloodType": "string",
-  "birthday": "date",
-  "gender": "MALE | FEMALE",
-  "subjects": "string[] (optional)"
-}
-```
-
-### 5. Parent Registration
-
-- Required before adding students
-
-```json
-{
-  "id": "string",
-  "username": "string",
-  "password": "string",
-  "name": "string",
-  "surname": "string",
-  "email": "string (optional)",
-  "phone": "string",
-  "address": "string",
-  "students": "string[] (optional)"
-}
-```
-
-### 6. Student Registration
-
-- Requires Parent, Class, and Grade to be set up first
-
-```json
-{
-  "id": "string",
-  "username": "string",
-  "password": "string",
-  "name": "string",
-  "surname": "string",
-  "email": "string (optional)",
-  "phone": "string (optional)",
-  "address": "string",
-  "img": "string (optional)",
-  "bloodType": "string",
-  "birthday": "date",
-  "gender": "MALE | FEMALE",
-  "gradeId": "number",
-  "classId": "number",
-  "parentId": "string"
-}
-```
-
-### 7. Lesson Setup
-
-- Requires Subject, Class, and Teacher to be set up first
-
-```json
-{
-  "id": "number",
-  "name": "string",
-  "day": "MONDAY | TUESDAY | WEDNESDAY | THURSDAY | FRIDAY",
-  "startTime": "date",
-  "endTime": "date",
-  "subjectId": "number",
-  "classId": "number",
-  "teacherId": "string"
-}
-```
-
-### 8. Additional Entities
-
-These can be added any time after their dependencies are met:
-
-#### Exams
-
-```json
-{
-  "id": "number",
-  "title": "string",
-  "startTime": "date",
-  "endTime": "date",
-  "lessonId": "number"
-}
-```
-
-#### Assignments
-
-```json
-{
-  "id": "number",
-  "title": "string",
-  "startDate": "date",
-  "dueDate": "date",
-  "lessonId": "number"
-}
-```
-
-#### Results
-
-```json
-{
-  "id": "number",
-  "score": "number (0-100)",
-  "examId": "number (optional)",
-  "assignmentId": "number (optional)",
-  "studentId": "string"
-}
-```
-
-#### Events
-
-```json
-{
-  "id": "number",
-  "title": "string",
-  "description": "string",
-  "startTime": "date",
-  "endTime": "date",
-  "classId": "number (optional)"
-}
-```
-
-#### Announcements
-
-```json
-{
-  "id": "number",
-  "title": "string",
-  "description": "string",
-  "date": "date",
-  "classId": "number (optional)"
-}
-```
-
-## Important Notes
-
-1. All IDs are automatically generated - do not manually set them
-2. Ensure all required fields are filled when creating new entries
-3. Follow the setup order to avoid relationship conflicts
-4. Some fields are optional and can be left empty (marked with "optional")
-5. Dates should be in valid date format
-6. Password fields should be at least 8 characters long
-7. Usernames must be between 3-20 characters
-8. Email fields must contain valid email addresses
-
-## Dependencies
-
-- Each Student must have a Parent
-- Each Student must be assigned to a Class and Grade
-- Each Class must belong to a Grade
-- Each Lesson must have a Subject, Class, and Teacher
-- Results must be linked to a Student and either an Exam or Assignment
-
-Following this order ensures proper database setup and maintains data integrity throughout the system.
-
+# Seed the database (optional)
 npx prisma db seed
+```
 
-npx prisma migrate reset --force
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
+- `npm run format:check` - Check code formatting
+
+## Prisma Commands
+
+- `npx prisma generate` - Generate Prisma Client
+- `npx prisma migrate dev` - Create and apply migrations
+- `npx prisma migrate deploy` - Deploy migrations to production
+- `npx prisma studio` - Open Prisma Studio (database GUI)
+- `npx prisma db seed` - Seed the database
+- `npx prisma db push` - Push schema changes to database without migrations
+
+## Docker Deployment
+
+1. Build the Docker image:
+```bash
+docker build -t school-dashboard .
+```
+
+2. Run with Docker Compose:
+```bash
+docker-compose up -d
+```
+
+## Project Structure
+
+```
+├── src/
+│   ├── app/                    # Next.js app directory
+│   │   ├── (dashboard)/       # Dashboard routes
+│   │   ├── [[...sign-in]]/    # Authentication routes
+│   │   ├── logout/           # Logout route
+│   │   ├── layout.tsx        # Root layout
+│   │   ├── globals.css       # Global styles
+│   │   └── favicon.ico       # Site favicon
+│   ├── components/           # Reusable components
+│   │   ├── forms/           # Form-related components
+│   │   ├── Menu.tsx         # Navigation menu
+│   │   ├── Navbar.tsx       # Top navigation bar
+│   │   ├── Table.tsx        # Reusable table component
+│   │   ├── TableSearch.tsx  # Table search functionality
+│   │   ├── FormModal.tsx    # Modal for forms
+│   │   ├── FormContainer.tsx # Form wrapper component
+│   │   ├── InputField.tsx   # Reusable input component
+│   │   ├── Pagination.tsx   # Pagination component
+│   │   ├── UserCard.tsx     # User profile card
+│   │   ├── Announcements.tsx # Announcements component
+│   │   ├── BigCalendar.tsx  # Calendar component
+│   │   ├── EventList.tsx    # Event listing component
+│   │   ├── Performance.tsx  # Performance metrics
+│   │   └── Charts/          # Chart components
+│   │       ├── FinanceChart.tsx
+│   │       ├── CountChart.tsx
+│   │       └── AttendanceChart.tsx
+│   ├── lib/                 # Utility functions and configurations
+│   │   ├── prisma.ts       # Prisma client configuration
+│   │   ├── actions.ts      # Server actions
+│   │   ├── settings.ts     # Application settings
+│   │   └── formValidationSchemas.ts # Form validation schemas
+│   ├── utils/              # Helper functions
+│   └── middleware.ts       # Next.js middleware
+├── prisma/
+│   ├── schema.prisma      # Database schema
+│   └── seed.ts           # Database seed file
+├── public/               # Static assets
+├── .env                 # Environment variables
+├── package.json         # Project dependencies
+├── tsconfig.json        # TypeScript configuration
+├── tailwind.config.ts   # Tailwind CSS configuration
+├── next.config.mjs      # Next.js configuration
+├── docker-compose.yml   # Docker Compose configuration
+└── Dockerfile          # Docker configuration
+```
+
+## Database Schema
+
+The application includes the following main models:
+
+- **Admin**: System administrators
+- **Student**: Student information and records
+- **Teacher**: Teacher information and assignments
+- **Parent**: Parent information and student associations
+- **Grade**: Grade levels
+- **Class**: Class information and assignments
+- **Subject**: Subject information
+- **Lesson**: Class lessons and schedules
+- **Exam**: Exam records and results
+- **Assignment**: Homework assignments
+- **Result**: Student exam and assignment results
+- **Attendance**: Student attendance records
+- **Event**: School events and activities
+- **Announcement**: Class announcements
+
+## Contributing
+
+1. Create a new branch for your feature
+2. Make your changes
+3. Run tests and linting
+4. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
