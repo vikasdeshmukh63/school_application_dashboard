@@ -9,6 +9,8 @@ type InputFieldProps = {
   error?: FieldError;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   hidden?: boolean;
+  min?: number;
+  max?: number;
 };
 
 const InputField = ({
@@ -20,6 +22,8 @@ const InputField = ({
   error,
   inputProps,
   hidden = false,
+  min,
+  max,
 }: InputFieldProps) => {
   return (
     <div className={hidden ? 'hidden' : 'flex flex-col gap-2 w-full md:w-1/4'}>
@@ -31,6 +35,8 @@ const InputField = ({
         {...inputProps}
         defaultValue={defaultValue}
         hidden={hidden}
+        min={min}
+        max={max}
       />
       {error?.message && <p className="text-xs text-red-400">{error.message.toString()}</p>}
     </div>

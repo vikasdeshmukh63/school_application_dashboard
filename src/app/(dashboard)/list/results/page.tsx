@@ -20,6 +20,9 @@ type ResultList = {
   score: number;
   className: string;
   startTime: Date;
+  examId?: number;
+  assignmentId?: number;
+  studentId?: number;
 };
 
 const renderRow = async (item: ResultList) => {
@@ -39,13 +42,12 @@ const renderRow = async (item: ResultList) => {
       </td>
       <td>
         <div className="flex items-center gap-2">
-          {role === 'admin' ||
-            (role === 'teacher' && (
-              <>
-                <FormContainer table="result" type="update" data={item} />
-                <FormContainer table="result" type="delete" id={item.id} />
-              </>
-            ))}
+          {(role === 'admin' || role === 'teacher') && (
+            <>
+              <FormContainer table="result" type="update" data={item} />
+              <FormContainer table="result" type="delete" id={item.id} />
+            </>
+          )}
         </div>
       </td>
     </tr>
@@ -216,6 +218,9 @@ const ResultListPage = async ({
       score: item.score,
       className: assessment.lesson.class.name,
       startTime: isExam ? assessment.startTime : assessment.startDate,
+      examId: item.examId,
+      assignmentId: item.assignmentId,
+      studentId: item.studentId,
     };
   });
   return (
@@ -232,7 +237,9 @@ const ResultListPage = async ({
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-customYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === 'admin' || (role === 'teacher' && <FormContainer table="result" type="create" />)}
+            {(role === 'admin' || role === 'teacher') && (
+              <FormContainer table="result" type="create" />
+            )}
           </div>
         </div>
       </div>

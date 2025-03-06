@@ -61,8 +61,8 @@ const ResultForm = ({
           label="Score"
           name="score"
           type="number"
-          min="0"
-          max="100"
+          min={0}
+          max={100}
           defaultValue={data?.score}
           register={register}
           error={errors?.score}
@@ -139,4 +139,4 @@ const ResultForm = ({
   );
 };
 
-export default ResultForm; 
+export default ResultForm;

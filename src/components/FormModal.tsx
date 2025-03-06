@@ -11,6 +11,7 @@ import {
   deleteAssignment,
   deleteEvent,
   deleteAnnouncement,
+  deleteResult,
 } from '@/lib/actions';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
@@ -35,7 +36,7 @@ const deleteActionMap: Partial<Record<TableType, ServerAction>> = {
   lesson: deleteLesson,
   exam: deleteExam,
   assignment: deleteAssignment,
-  // result: deleteSubject, // temporary placeholder
+  result: deleteResult,
   // attendance: deleteSubject, // temporary placeholder
   event: deleteEvent,
   announcement: deleteAnnouncement,

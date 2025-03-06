@@ -14,6 +14,7 @@ import {
   lessonSchema,
   ParentSchema,
   parentSchema,
+  ResultSchema,
   resultSchema,
   StudentSchema,
   SubjectSchema,
@@ -669,50 +670,34 @@ export async function deleteAssignment(currentState: CurrentState, data: FormDat
     return { success: false, error: true };
   }
 }
-export async function createResult(formData: FormData) {
-  const validatedFields = resultSchema.safeParse({
-    score: formData.get('score'),
-    examId: formData.get('examId'),
-    assignmentId: formData.get('assignmentId'),
-    studentId: formData.get('studentId'),
-  });
-
-  if (!validatedFields.success) {
-    return { success: false, error: true };
-  }
-
+export async function createResult(currentState: CurrentState, data: ResultSchema) {
   try {
     await prisma.result.create({
-      data: validatedFields.data,
+      data,
     });
-
+    return { success: true, error: false };
+  } catch (error) {
+    return { success: false, error: true };
+  }
+}
+export async function updateResult(currentState: CurrentState, data: ResultSchema) {
+  try {
+    await prisma.result.update({
+      where: { id: data.id },
+      data,
+    });
     return { success: true, error: false };
   } catch (error) {
     return { success: false, error: true };
   }
 }
 
-export async function updateResult(formData: FormData) {
-  const validatedFields = resultSchema.safeParse({
-    id: formData.get('id'),
-    score: formData.get('score'),
-    examId: formData.get('examId'),
-    assignmentId: formData.get('assignmentId'),
-    studentId: formData.get('studentId'),
-  });
-
-  if (!validatedFields.success) {
-    return { success: false, error: true };
-  }
-
+export async function deleteResult(currentState: CurrentState, data: FormData) {
+  const id = data.get('id') as string;
   try {
-    const { id, ...data } = validatedFields.data;
-
-    await prisma.result.update({
-      where: { id },
-      data,
+    await prisma.result.delete({
+      where: { id: parseInt(id) },
     });
-
     return { success: true, error: false };
   } catch (error) {
     return { success: false, error: true };
