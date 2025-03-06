@@ -214,13 +214,9 @@ The application includes the following main models:
 - **Event**: School events and activities
 - **Announcement**: Class announcements
 
-## Contributing
+## Credentials
 
-1. Create a new branch for your feature
-2. Make your changes
-3. Run tests and linting
-4. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License.
+- Admin: admin, password: admin
+- Teacher: teacher, password: teacher
+- Student: student, password: student
+- Parent: parent, password: parent
