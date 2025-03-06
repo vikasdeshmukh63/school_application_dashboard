@@ -145,7 +145,7 @@ const ResultForm = ({
       {/* error */}
       {state.error && <span className="text-red-500">Something went wrong!</span>}
       {/* button */}
-      <button type="submit" className="bg-blue-400 text-white p-2 rounded-md">
+      <button type="submit" className="bg-customPurple text-white p-2 rounded-md">
         {type === 'create' ? 'Create' : 'Update'}
       </button>
     </form>

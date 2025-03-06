@@ -13,7 +13,7 @@ import {
   deleteSubject,
   deleteTeacher,
 } from '@/lib/actions';
-import { X } from 'lucide-react';
+import { Plus, UserPlus, UserRoundPen, X } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -183,7 +183,7 @@ const FormModal = ({
         className={`${size} flex items-center justify-center rounded-full ${bgColor}`}
         onClick={() => setOpen(true)}
       >
-        <Image src={`/${type}.png`} alt="" width={16} height={16} />
+        {type === 'create' ? <Plus className="h-6 w-6" /> : <UserRoundPen className="h-6 w-6" />}
       </button>
       {open && (
         <div className="w-screen h-screen absolute left-0 top-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">

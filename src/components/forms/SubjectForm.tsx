@@ -104,7 +104,7 @@ const SubjectForm = ({
       {/* error */}
       {state.error && <span className="text-red-400">Something went wrong</span>}
       {/* button */}
-      <button className="bg-blue-400 text-white p-2 rounded-md" type="submit">
+      <button className="bg-customPurple text-white p-2 rounded-md" type="submit">
         {type === 'create' ? 'Create' : 'Update'}
       </button>
     </form>
